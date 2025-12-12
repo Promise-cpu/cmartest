@@ -113,7 +113,7 @@
             font-weight: 500;
         }
         
-        input[type="text"], input[type="email"], input[type="password"], input[type="tel"] {
+        input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select {
             width: 100%; 
             padding: 14px 45px 14px 15px; 
             border-radius: 8px; 
@@ -121,9 +121,20 @@
             outline: none; 
             font-size: 16px;
             background: #f9f9f9;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
         }
         
-        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="tel"]:focus {
+        select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+            padding-right: 45px;
+        }
+        
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="tel"]:focus, select:focus {
             border-color: steelblue;
             background: white;
         }
@@ -197,7 +208,6 @@
             background: #eaf7ff;
             border-radius: 6px;
             border-left: 3px solid #3498db;
-            display: none;
         }
         
         .muted { 
@@ -395,6 +405,32 @@
                     <input type="password" id="signupConfirm" placeholder="Confirm password" required />
                     <i class="fas fa-eye password-toggle" id="toggleSignupConfirm"></i>
                 </div>
+                <!-- Security Question Section -->
+                <div class="info" id="securityInfo">
+                    <i class="fas fa-shield-alt"></i> Set up a security question for password recovery
+                </div>
+                <div class="form-group">
+                    <label for="securityQuestion">Security Question</label>
+                    <select id="securityQuestion" required>
+                        <option value="">Choose a security question</option>
+                        <option value="What was your first pet's name?">What was your first pet's name?</option>
+                        <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+                        <option value="What city were you born in?">What city were you born in?</option>
+                        <option value="What was the name of your first school?">What was the name of your first school?</option>
+                        <option value="What is your favorite childhood friend's name?">What is your favorite childhood friend's name?</option>
+                        <option value="What is your favorite movie?">What is your favorite movie?</option>
+                        <option value="What was your childhood nickname?">What was your childhood nickname?</option>
+                        <option value="custom">Create my own question...</option>
+                    </select>
+                </div>
+                <div class="form-group" id="customQuestionGroup" style="display: none;">
+                    <label for="customQuestion">Your Custom Question</label>
+                    <input type="text" id="customQuestion" placeholder="Enter your security question" />
+                </div>
+                <div class="form-group">
+                    <label for="securityAnswer">Security Answer</label>
+                    <input type="text" id="securityAnswer" placeholder="Enter your answer" required />
+                </div>
                 <div class="error" id="signupError"></div>
                 <button type="submit" class="btn">Create Account</button>
                 <div class="muted">
@@ -402,8 +438,40 @@
                 </div>
             </form>
             
-            <!-- Forgot Password Form - Step 1: Enter Email -->
+            <!-- Forgot Password - Step 1: Choose Method -->
             <form class="auth-form" id="forgotFormStep1">
+                <div class="info">
+                    <i class="fas fa-key"></i> Choose how you want to reset your password
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 16px; color: #333;">Reset Method</label>
+                    <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 10px;">
+                        <div class="method-option" style="padding: 15px; border: 2px solid #e6e6e6; border-radius: 8px; cursor: pointer;" id="emailMethod">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-envelope" style="color: steelblue; font-size: 20px;"></i>
+                                <div>
+                                    <div style="font-weight: 600; color: #333;">Email Verification</div>
+                                    <div style="font-size: 13px; color: #666;">Receive a verification code via email</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="method-option" style="padding: 15px; border: 2px solid #e6e6e6; border-radius: 8px; cursor: pointer;" id="securityMethod">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-shield-alt" style="color: steelblue; font-size: 20px;"></i>
+                                <div>
+                                    <div style="font-weight: 600; color: #333;">Security Question</div>
+                                    <div style="font-size: 13px; color: #666;">Answer your security question</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="error" id="forgotErrorStep1"></div>
+                <button type="button" class="btn secondary" id="backToSigninBtn">Back to Sign In</button>
+            </form>
+            
+            <!-- Forgot Password - Step 2a: Email Method - Enter Email -->
+            <form class="auth-form" id="forgotFormStep2a">
                 <div class="form-group">
                     <label for="forgotEmail">Email Address</label>
                     <input type="email" id="forgotEmail" placeholder="Enter your registered email" required />
@@ -411,18 +479,30 @@
                 <div class="info" id="forgotInfo">
                     A 6-digit verification code will be sent to your email.
                 </div>
-                <div class="error" id="forgotErrorStep1"></div>
+                <div class="error" id="forgotErrorStep2a"></div>
                 <button type="submit" class="btn" id="sendCodeBtn">
                     <span id="sendCodeText">Send Verification Code</span>
                     <span id="sendCodeLoading" style="display: none;"><div class="loading"></div>Sending...</span>
                 </button>
-                <div class="muted">
-                    Remember your password? <span class="switch-link" id="toSigninFromForgot">Sign in here</span>
-                </div>
+                <button type="button" class="btn secondary" id="backToMethodBtn">Choose different method</button>
             </form>
             
-            <!-- Forgot Password Form - Step 2: Enter Code -->
-            <form class="auth-form" id="forgotFormStep2">
+            <!-- Forgot Password - Step 2b: Security Question Method - Enter Email -->
+            <form class="auth-form" id="forgotFormStep2b">
+                <div class="form-group">
+                    <label for="forgotEmailSecurity">Email Address</label>
+                    <input type="email" id="forgotEmailSecurity" placeholder="Enter your registered email" required />
+                </div>
+                <div class="info" id="forgotInfoSecurity">
+                    You will be asked your security question to reset your password.
+                </div>
+                <div class="error" id="forgotErrorStep2b"></div>
+                <button type="submit" class="btn" id="checkSecurityBtn">Continue to Security Question</button>
+                <button type="button" class="btn secondary" id="backToMethodBtn2">Choose different method</button>
+            </form>
+            
+            <!-- Forgot Password - Step 3a: Email Method - Enter Code -->
+            <form class="auth-form" id="forgotFormStep3a">
                 <div class="muted">
                     We sent a 6-digit code to <span id="userEmailDisplay" style="font-weight: 600;"></span>
                 </div>
@@ -441,13 +521,27 @@
                     Didn't receive the code? 
                     <span class="resend-link" id="resendLink">Resend code</span>
                 </div>
-                <div class="error" id="forgotErrorStep2"></div>
+                <div class="error" id="forgotErrorStep3a"></div>
                 <button type="submit" class="btn" id="verifyCodeBtn" disabled>Verify Code</button>
                 <button type="button" class="btn secondary" id="backToEmailBtn">Use different email</button>
             </form>
             
-            <!-- Forgot Password Form - Step 3: Reset Password -->
-            <form class="auth-form" id="forgotFormStep3">
+            <!-- Forgot Password - Step 3b: Security Question Method - Answer Question -->
+            <form class="auth-form" id="forgotFormStep3b">
+                <div class="muted">
+                    Answer your security question for <span id="userEmailDisplaySecurity" style="font-weight: 600;"></span>
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 16px; color: #333; margin-top: 20px;" id="securityQuestionDisplay"></label>
+                    <input type="text" id="securityAnswerInput" placeholder="Enter your answer" required />
+                </div>
+                <div class="error" id="forgotErrorStep3b"></div>
+                <button type="submit" class="btn" id="verifySecurityAnswerBtn">Verify Answer</button>
+                <button type="button" class="btn secondary" id="backToEmailBtn2">Use different email</button>
+            </form>
+            
+            <!-- Forgot Password - Step 4: Reset Password -->
+            <form class="auth-form" id="forgotFormStep4">
                 <div class="form-group">
                     <label for="newPassword">New Password (min 6 characters)</label>
                     <input type="password" id="newPassword" placeholder="Enter new password" required />
@@ -458,7 +552,7 @@
                     <input type="password" id="confirmNewPassword" placeholder="Confirm new password" required />
                     <i class="fas fa-eye password-toggle" id="toggleConfirmNewPassword"></i>
                 </div>
-                <div class="error" id="forgotErrorStep3"></div>
+                <div class="error" id="forgotErrorStep4"></div>
                 <button type="submit" class="btn">Reset Password</button>
             </form>
         </div>
@@ -466,15 +560,15 @@
 
     <!-- Navigation Bar -->
     <div class="nav-bar">
-        <a href="home.html" class="nav-item">
+        <a href="index.html" class="nav-item">
             <i class="fas fa-home nav-icon"></i>
             <span>Home</span>
         </a>
-        <a href="updates.html" class="nav-item">
+        <a href="index.html#updates" class="nav-item">
             <i class="fas fa-sync-alt nav-icon"></i>
             <span>Updates</span>
         </a>
-        <a href="account.html" class="nav-item active">
+        <a href="index.html#account" class="nav-item active">
             <i class="fas fa-user nav-icon"></i>
             <span>Account</span>
         </a>
@@ -482,30 +576,19 @@
 
     <script>
         // ======================= EMAILJS CONFIGURATION =======================
-        // YOU MUST CONFIGURE THESE VALUES FOR EMAIL SENDING TO WORK
-        
-        // 1. Go to https://www.emailjs.com/ and create a free account
-        // 2. Create an email template with these variables:
-        //    - {{to_email}} - Recipient's email
-        //    - {{verification_code}} - The 6-digit code
-        //    - {{app_name}} - Your app name
-        // 3. Get your Service ID, Template ID, and User ID
-        
         const EMAILJS_CONFIG = {
             SERVICE_ID: 'YOUR_SERVICE_ID', // Replace with your EmailJS Service ID
             TEMPLATE_ID: 'YOUR_TEMPLATE_ID', // Replace with your EmailJS Template ID
             PUBLIC_KEY: 'YOUR_PUBLIC_KEY', // Replace with your EmailJS Public Key
-            APP_NAME: 'cMart' // Your app name
+            APP_NAME: 'cMart'
         };
         
-        // Initialize EmailJS with your public key
+        // Initialize EmailJS
         (function() {
             emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
         })();
         
-        // ======================= END CONFIGURATION =======================
-        
-        // Get URL parameters to determine which form to show
+        // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const action = urlParams.get('action');
         
@@ -516,49 +599,62 @@
         const signinForm = document.getElementById('signinForm');
         const signupForm = document.getElementById('signupForm');
         const forgotFormStep1 = document.getElementById('forgotFormStep1');
-        const forgotFormStep2 = document.getElementById('forgotFormStep2');
-        const forgotFormStep3 = document.getElementById('forgotFormStep3');
+        const forgotFormStep2a = document.getElementById('forgotFormStep2a');
+        const forgotFormStep2b = document.getElementById('forgotFormStep2b');
+        const forgotFormStep3a = document.getElementById('forgotFormStep3a');
+        const forgotFormStep3b = document.getElementById('forgotFormStep3b');
+        const forgotFormStep4 = document.getElementById('forgotFormStep4');
         const toSignupLink = document.getElementById('toSignupLink');
         const toSigninLink = document.getElementById('toSigninLink');
         const forgotPasswordLink = document.getElementById('forgotPasswordLink');
-        const toSigninFromForgot = document.getElementById('toSigninFromForgot');
-        const userEmailDisplay = document.getElementById('userEmailDisplay');
-        const codeInputsContainer = document.getElementById('codeInputsContainer');
-        const verifyCodeBtn = document.getElementById('verifyCodeBtn');
-        const backToEmailBtn = document.getElementById('backToEmailBtn');
-        const resendLink = document.getElementById('resendLink');
-        const timeRemaining = document.getElementById('timeRemaining');
-        const sendCodeBtn = document.getElementById('sendCodeBtn');
-        const sendCodeText = document.getElementById('sendCodeText');
-        const sendCodeLoading = document.getElementById('sendCodeLoading');
+        const backToSigninBtn = document.getElementById('backToSigninBtn');
+        
+        // Security question elements
+        const securityQuestionSelect = document.getElementById('securityQuestion');
+        const customQuestionGroup = document.getElementById('customQuestionGroup');
+        const customQuestionInput = document.getElementById('customQuestion');
         
         // Variables for password reset
         let resetEmail = '';
         let verificationCode = '';
         let timerInterval = null;
         let timeLeft = 300; // 5 minutes in seconds
+        let resetMethod = ''; // 'email' or 'security'
+        let securityQuestion = '';
+        let securityAnswer = '';
         
-        // Switch to Sign Up form
-        function showSignupForm() {
-            hideAllForms();
-            signinTab.classList.remove('active');
-            signupTab.classList.add('active');
-            forgotTab.style.display = 'none';
-            signupForm.classList.add('active');
-            clearErrors();
-        }
+        // Security question change handler
+        securityQuestionSelect.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                customQuestionGroup.style.display = 'block';
+                customQuestionInput.required = true;
+            } else {
+                customQuestionGroup.style.display = 'none';
+                customQuestionInput.required = false;
+            }
+        });
         
-        // Switch to Sign In form
+        // Form switching functions
         function showSigninForm() {
             hideAllForms();
+            signinTab.classList.remove('active');
             signupTab.classList.remove('active');
-            signinTab.classList.add('active');
             forgotTab.style.display = 'none';
+            signinTab.classList.add('active');
             signinForm.classList.add('active');
             clearErrors();
         }
         
-        // Switch to Forgot Password form - Step 1
+        function showSignupForm() {
+            hideAllForms();
+            signinTab.classList.remove('active');
+            signupTab.classList.remove('active');
+            forgotTab.style.display = 'none';
+            signupTab.classList.add('active');
+            signupForm.classList.add('active');
+            clearErrors();
+        }
+        
         function showForgotFormStep1() {
             hideAllForms();
             signinTab.classList.remove('active');
@@ -569,11 +665,24 @@
             clearErrors();
         }
         
-        // Switch to Forgot Password form - Step 2
-        function showForgotFormStep2(email) {
+        function showForgotFormStep2a() {
             hideAllForms();
-            forgotFormStep2.classList.add('active');
-            userEmailDisplay.textContent = email;
+            forgotFormStep2a.classList.add('active');
+            resetMethod = 'email';
+            clearErrors();
+        }
+        
+        function showForgotFormStep2b() {
+            hideAllForms();
+            forgotFormStep2b.classList.add('active');
+            resetMethod = 'security';
+            clearErrors();
+        }
+        
+        function showForgotFormStep3a(email) {
+            hideAllForms();
+            forgotFormStep3a.classList.add('active');
+            document.getElementById('userEmailDisplay').textContent = email;
             resetEmail = email;
             
             // Generate verification code
@@ -589,10 +698,28 @@
             clearErrors();
         }
         
-        // Switch to Forgot Password form - Step 3
-        function showForgotFormStep3() {
+        function showForgotFormStep3b(email) {
             hideAllForms();
-            forgotFormStep3.classList.add('active');
+            forgotFormStep3b.classList.add('active');
+            document.getElementById('userEmailDisplaySecurity').textContent = email;
+            resetEmail = email;
+            
+            // Get user's security question
+            const users = JSON.parse(localStorage.getItem('cmartUsers') || '[]');
+            const user = users.find(u => u.email === email);
+            
+            if (user && user.securityQuestion) {
+                document.getElementById('securityQuestionDisplay').textContent = user.securityQuestion;
+                securityQuestion = user.securityQuestion;
+                securityAnswer = user.securityAnswer;
+            }
+            
+            clearErrors();
+        }
+        
+        function showForgotFormStep4() {
+            hideAllForms();
+            forgotFormStep4.classList.add('active');
             clearErrors();
         }
         
@@ -600,8 +727,11 @@
             signinForm.classList.remove('active');
             signupForm.classList.remove('active');
             forgotFormStep1.classList.remove('active');
-            forgotFormStep2.classList.remove('active');
-            forgotFormStep3.classList.remove('active');
+            forgotFormStep2a.classList.remove('active');
+            forgotFormStep2b.classList.remove('active');
+            forgotFormStep3a.classList.remove('active');
+            forgotFormStep3b.classList.remove('active');
+            forgotFormStep4.classList.remove('active');
             forgotTab.classList.remove('active');
         }
         
@@ -609,18 +739,28 @@
             document.getElementById('signinError').style.display = 'none';
             document.getElementById('signupError').style.display = 'none';
             document.getElementById('forgotErrorStep1').style.display = 'none';
-            document.getElementById('forgotErrorStep2').style.display = 'none';
-            document.getElementById('forgotErrorStep3').style.display = 'none';
+            document.getElementById('forgotErrorStep2a').style.display = 'none';
+            document.getElementById('forgotErrorStep2b').style.display = 'none';
+            document.getElementById('forgotErrorStep3a').style.display = 'none';
+            document.getElementById('forgotErrorStep3b').style.display = 'none';
+            document.getElementById('forgotErrorStep4').style.display = 'none';
         }
         
-        // Event Listeners
+        // Event Listeners for form switching
         signinTab.addEventListener('click', showSigninForm);
         signupTab.addEventListener('click', showSignupForm);
         toSignupLink.addEventListener('click', showSignupForm);
         toSigninLink.addEventListener('click', showSigninForm);
         forgotPasswordLink.addEventListener('click', showForgotFormStep1);
-        toSigninFromForgot.addEventListener('click', showSigninForm);
-        backToEmailBtn.addEventListener('click', showForgotFormStep1);
+        backToSigninBtn.addEventListener('click', showSigninForm);
+        
+        // Forgot password method selection
+        document.getElementById('emailMethod').addEventListener('click', showForgotFormStep2a);
+        document.getElementById('securityMethod').addEventListener('click', showForgotFormStep2b);
+        document.getElementById('backToMethodBtn').addEventListener('click', showForgotFormStep1);
+        document.getElementById('backToMethodBtn2').addEventListener('click', showForgotFormStep1);
+        document.getElementById('backToEmailBtn').addEventListener('click', showForgotFormStep2a);
+        document.getElementById('backToEmailBtn2').addEventListener('click', showForgotFormStep2b);
         
         // Password toggle functionality
         document.getElementById('toggleSigninPassword').addEventListener('click', function() {
@@ -665,9 +805,9 @@
         async function sendVerificationCode(email, code) {
             try {
                 // Show loading state
-                sendCodeText.style.display = 'none';
-                sendCodeLoading.style.display = 'inline';
-                sendCodeBtn.disabled = true;
+                document.getElementById('sendCodeText').style.display = 'none';
+                document.getElementById('sendCodeLoading').style.display = 'inline';
+                document.getElementById('sendCodeBtn').disabled = true;
                 
                 // Prepare email parameters
                 const templateParams = {
@@ -686,9 +826,9 @@
                 );
                 
                 // Hide loading state
-                sendCodeText.style.display = 'inline';
-                sendCodeLoading.style.display = 'none';
-                sendCodeBtn.disabled = false;
+                document.getElementById('sendCodeText').style.display = 'inline';
+                document.getElementById('sendCodeLoading').style.display = 'none';
+                document.getElementById('sendCodeBtn').disabled = false;
                 
                 return { success: true, message: 'Verification code sent successfully!' };
                 
@@ -696,9 +836,9 @@
                 console.error('Email sending failed:', error);
                 
                 // Hide loading state
-                sendCodeText.style.display = 'inline';
-                sendCodeLoading.style.display = 'none';
-                sendCodeBtn.disabled = false;
+                document.getElementById('sendCodeText').style.display = 'inline';
+                document.getElementById('sendCodeLoading').style.display = 'none';
+                document.getElementById('sendCodeBtn').disabled = false;
                 
                 return { 
                     success: false, 
@@ -710,33 +850,32 @@
         // Start countdown timer
         function startTimer() {
             clearInterval(timerInterval);
-            timeLeft = 300; // Reset to 5 minutes
+            timeLeft = 300;
             
             timerInterval = setInterval(() => {
                 timeLeft--;
                 
                 const minutes = Math.floor(timeLeft / 60);
                 const seconds = timeLeft % 60;
-                timeRemaining.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                document.getElementById('timeRemaining').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                 
-                // Update resend link state
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    timeRemaining.textContent = '00:00';
-                    resendLink.classList.remove('disabled');
-                    resendLink.textContent = 'Resend code';
-                } else if (timeLeft < 290) { // Enable resend after 10 seconds
-                    resendLink.classList.remove('disabled');
-                    resendLink.textContent = 'Resend code';
+                    document.getElementById('timeRemaining').textContent = '00:00';
+                    document.getElementById('resendLink').classList.remove('disabled');
+                    document.getElementById('resendLink').textContent = 'Resend code';
+                } else if (timeLeft < 290) {
+                    document.getElementById('resendLink').classList.remove('disabled');
+                    document.getElementById('resendLink').textContent = 'Resend code';
                 } else {
-                    resendLink.classList.add('disabled');
-                    resendLink.textContent = 'Resend code (wait)';
+                    document.getElementById('resendLink').classList.add('disabled');
+                    document.getElementById('resendLink').textContent = 'Resend code (wait)';
                 }
             }, 1000);
         }
         
         // Handle code input navigation
-        codeInputsContainer.addEventListener('input', function(e) {
+        document.getElementById('codeInputsContainer').addEventListener('input', function(e) {
             const input = e.target;
             const index = parseInt(input.getAttribute('data-index'));
             const value = input.value;
@@ -750,11 +889,11 @@
             // Enable verify button if all inputs are filled
             const allInputs = document.querySelectorAll('.code-input');
             const allFilled = Array.from(allInputs).every(input => input.value.length === 1);
-            verifyCodeBtn.disabled = !allFilled;
+            document.getElementById('verifyCodeBtn').disabled = !allFilled;
         });
         
         // Handle backspace in code inputs
-        codeInputsContainer.addEventListener('keydown', function(e) {
+        document.getElementById('codeInputsContainer').addEventListener('keydown', function(e) {
             const input = e.target;
             const index = parseInt(input.getAttribute('data-index'));
             
@@ -765,8 +904,8 @@
         });
         
         // Resend code functionality
-        resendLink.addEventListener('click', async function() {
-            if (resendLink.classList.contains('disabled') || timeLeft <= 0) {
+        document.getElementById('resendLink').addEventListener('click', async function() {
+            if (this.classList.contains('disabled') || timeLeft <= 0) {
                 return;
             }
             
@@ -790,10 +929,10 @@
                 const firstInput = document.querySelector('.code-input[data-index="0"]');
                 if (firstInput) firstInput.focus();
                 
-                verifyCodeBtn.disabled = true;
+                document.getElementById('verifyCodeBtn').disabled = true;
                 
                 // Show success message
-                const errorElement = document.getElementById('forgotErrorStep2');
+                const errorElement = document.getElementById('forgotErrorStep3a');
                 errorElement.textContent = 'New verification code sent to your email!';
                 errorElement.style.display = 'block';
                 errorElement.style.background = '#eaffea';
@@ -805,7 +944,7 @@
                 }, 3000);
             } else {
                 // Show error message
-                const errorElement = document.getElementById('forgotErrorStep2');
+                const errorElement = document.getElementById('forgotErrorStep3a');
                 errorElement.textContent = result.message;
                 errorElement.style.display = 'block';
             }
@@ -827,8 +966,8 @@
                 localStorage.setItem('cmartCurrentUser', JSON.stringify(user));
                 errorElement.style.display = 'none';
                 
-                // Redirect to home page (SPA)
-                window.location.href = 'home.html#account';
+                // Redirect to index.html with account page
+                window.location.href = 'index.html#account';
             } else {
                 errorElement.textContent = 'Invalid email or password. Please try again.';
                 errorElement.style.display = 'block';
@@ -841,10 +980,23 @@
             const email = document.getElementById('signupEmail').value.trim().toLowerCase();
             const password = document.getElementById('signupPassword').value;
             const confirmPassword = document.getElementById('signupConfirm').value;
+            const selectedQuestion = document.getElementById('securityQuestion').value;
+            const customQuestion = document.getElementById('customQuestion').value;
+            const securityAnswerInput = document.getElementById('securityAnswer').value.trim();
             const errorElement = document.getElementById('signupError');
             
-            // Get existing users
-            const users = JSON.parse(localStorage.getItem('cmartUsers') || '[]');
+            // Determine the security question
+            let finalSecurityQuestion = '';
+            if (selectedQuestion === 'custom') {
+                if (!customQuestion.trim()) {
+                    errorElement.textContent = 'Please enter your custom security question';
+                    errorElement.style.display = 'block';
+                    return;
+                }
+                finalSecurityQuestion = customQuestion.trim();
+            } else {
+                finalSecurityQuestion = selectedQuestion;
+            }
             
             // Validation
             if (password.length < 6) {
@@ -859,6 +1011,15 @@
                 return;
             }
             
+            if (!securityAnswerInput) {
+                errorElement.textContent = 'Please provide an answer to your security question';
+                errorElement.style.display = 'block';
+                return;
+            }
+            
+            // Get existing users
+            const users = JSON.parse(localStorage.getItem('cmartUsers') || '[]');
+            
             // Check if user already exists
             if (users.find(u => u.email === email)) {
                 errorElement.textContent = 'An account with this email already exists';
@@ -866,23 +1027,29 @@
                 return;
             }
             
-            // Create new user
-            const newUser = { name, email, password };
+            // Create new user with security question
+            const newUser = { 
+                name, 
+                email, 
+                password,
+                securityQuestion: finalSecurityQuestion,
+                securityAnswer: securityAnswerInput
+            };
             users.push(newUser);
             localStorage.setItem('cmartUsers', JSON.stringify(users));
             localStorage.setItem('cmartCurrentUser', JSON.stringify(newUser));
             
             errorElement.style.display = 'none';
             
-            // Redirect to home page (SPA)
-            window.location.href = 'home.html#account';
+            // Redirect to index.html with account page
+            window.location.href = 'index.html#account';
         });
         
-        // Forgot Password - Step 1: Send Code
-        document.getElementById('forgotFormStep1').addEventListener('submit', async function(e) {
+        // Forgot Password - Step 2a: Email Method - Enter Email
+        document.getElementById('forgotFormStep2a').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('forgotEmail').value.trim().toLowerCase();
-            const errorElement = document.getElementById('forgotErrorStep1');
+            const errorElement = document.getElementById('forgotErrorStep2a');
             
             // Get existing users
             const users = JSON.parse(localStorage.getItem('cmartUsers') || '[]');
@@ -897,7 +1064,7 @@
                 
                 if (result.success) {
                     errorElement.style.display = 'none';
-                    showForgotFormStep2(email);
+                    showForgotFormStep3a(email);
                 } else {
                     errorElement.textContent = result.message;
                     errorElement.style.display = 'block';
@@ -909,10 +1076,35 @@
             }
         });
         
-        // Forgot Password - Step 2: Verify Code
-        document.getElementById('forgotFormStep2').addEventListener('submit', function(e) {
+        // Forgot Password - Step 2b: Security Question Method - Enter Email
+        document.getElementById('forgotFormStep2b').addEventListener('submit', function(e) {
             e.preventDefault();
-            const errorElement = document.getElementById('forgotErrorStep2');
+            const email = document.getElementById('forgotEmailSecurity').value.trim().toLowerCase();
+            const errorElement = document.getElementById('forgotErrorStep2b');
+            
+            // Get existing users
+            const users = JSON.parse(localStorage.getItem('cmartUsers') || '[]');
+            const user = users.find(u => u.email === email);
+            
+            if (user) {
+                if (!user.securityQuestion || !user.securityAnswer) {
+                    errorElement.textContent = 'This account does not have a security question set up. Please use email verification instead.';
+                    errorElement.style.display = 'block';
+                    return;
+                }
+                
+                errorElement.style.display = 'none';
+                showForgotFormStep3b(email);
+            } else {
+                errorElement.textContent = 'No account found with this email address.';
+                errorElement.style.display = 'block';
+            }
+        });
+        
+        // Forgot Password - Step 3a: Email Method - Verify Code
+        document.getElementById('forgotFormStep3a').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const errorElement = document.getElementById('forgotErrorStep3a');
             
             // Get entered code
             const codeInputs = document.querySelectorAll('.code-input');
@@ -924,19 +1116,35 @@
             // Check if code matches
             if (enteredCode === verificationCode) {
                 errorElement.style.display = 'none';
-                showForgotFormStep3();
+                showForgotFormStep4();
             } else {
                 errorElement.textContent = 'Invalid verification code. Please try again.';
                 errorElement.style.display = 'block';
             }
         });
         
-        // Forgot Password - Step 3: Reset Password
-        document.getElementById('forgotFormStep3').addEventListener('submit', function(e) {
+        // Forgot Password - Step 3b: Security Question Method - Verify Answer
+        document.getElementById('forgotFormStep3b').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const answer = document.getElementById('securityAnswerInput').value.trim().toLowerCase();
+            const errorElement = document.getElementById('forgotErrorStep3b');
+            
+            // Check if answer matches
+            if (answer === securityAnswer.toLowerCase()) {
+                errorElement.style.display = 'none';
+                showForgotFormStep4();
+            } else {
+                errorElement.textContent = 'Incorrect answer. Please try again.';
+                errorElement.style.display = 'block';
+            }
+        });
+        
+        // Forgot Password - Step 4: Reset Password
+        document.getElementById('forgotFormStep4').addEventListener('submit', function(e) {
             e.preventDefault();
             const newPassword = document.getElementById('newPassword').value;
             const confirmNewPassword = document.getElementById('confirmNewPassword').value;
-            const errorElement = document.getElementById('forgotErrorStep3');
+            const errorElement = document.getElementById('forgotErrorStep4');
             
             // Validation
             if (newPassword.length < 6) {
@@ -963,12 +1171,16 @@
                 // Clear the reset data
                 resetEmail = '';
                 verificationCode = '';
+                securityQuestion = '';
+                securityAnswer = '';
                 clearInterval(timerInterval);
                 
                 // Clear all inputs
                 document.getElementById('forgotEmail').value = '';
+                document.getElementById('forgotEmailSecurity').value = '';
                 document.getElementById('newPassword').value = '';
                 document.getElementById('confirmNewPassword').value = '';
+                document.getElementById('securityAnswerInput').value = '';
                 const codeInputs = document.querySelectorAll('.code-input');
                 codeInputs.forEach(input => input.value = '');
                 
@@ -1006,7 +1218,7 @@
                                  EMAILJS_CONFIG.PUBLIC_KEY === 'YOUR_PUBLIC_KEY';
             
             if (configMissing) {
-                console.warn('⚠️ EMAILJS NOT CONFIGURED: Password reset emails will not work.');
+                console.warn('⚠️ EMAILJS NOT CONFIGURED: Email verification will not work.');
                 console.warn('Please configure your EmailJS credentials at the top of the script.');
             }
         });
