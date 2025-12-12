@@ -225,6 +225,7 @@
             text-align: center;
             flex: 1;
             padding: 0 20px;
+            display: none; /* Initially hidden */
         }
         
         .search-filter-container {
@@ -891,7 +892,7 @@
             <div class="logo-fallback">cM</div>
         </div>
         
-       
+        <h1 class="app-name">cMart</h1>
         
         <div class="loading-container">
             <div class="loading-text">Loading your marketplace...</div>
@@ -908,7 +909,7 @@
         <!-- Header with Search and Filter -->
         <header id="mainHeader">
             <div class="header-title" id="headerTitle">cMart</div>
-            <div class="search-filter-container" id="searchFilterContainer" style="display: none;">
+            <div class="search-filter-container" id="searchFilterContainer">
                 <div class="search-container">
                     <i class="fas fa-search search-icon"></i>
                     <input type="text" class="search-bar" placeholder="Search products and services..." id="searchInput">
@@ -1038,6 +1039,46 @@
     </div>
 
     <script>
+        // ================== FIX FOR SKIPPING LOADING SCREEN ==================
+        // Check if we should skip loading (coming from sign in/sign up)
+        (function() {
+            // Check if skipLoading flag is set (coming from sign.html)
+            const skipLoading = localStorage.getItem('skipLoading');
+            const targetPage = window.location.hash.replace('#', '') || 'account';
+            
+            if (skipLoading === 'true') {
+                // Clear the flag immediately
+                localStorage.removeItem('skipLoading');
+                
+                // Skip splash screen entirely
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Hide splash screen immediately
+                    const splashScreen = document.getElementById('splashScreen');
+                    if (splashScreen) {
+                        splashScreen.style.display = 'none';
+                    }
+                    
+                    // Show main app immediately
+                    const mainApp = document.getElementById('mainApp');
+                    if (mainApp) {
+                        mainApp.style.display = 'block';
+                        mainApp.style.opacity = '1';
+                    }
+                    
+                    // Set up event listeners
+                    setTimeout(function() {
+                        setupEventListeners();
+                        
+                        // Navigate to the target page (account page by default)
+                        navigateTo(targetPage, false, true);
+                        
+                        // Initialize history
+                        initHistory();
+                    }, 100);
+                });
+            }
+        })();
+
         // Global variables
         let isModalOpen = false;
         let currentPage = 'home';
@@ -1075,6 +1116,32 @@
 
         // Initialize application
         function initApp() {
+            // Check if we should skip loading (alternative check)
+            const skipLoading = localStorage.getItem('skipLoading');
+            
+            if (skipLoading === 'true') {
+                // Skip splash screen
+                splashScreen.style.display = 'none';
+                mainApp.style.display = 'block';
+                
+                // Clear flag
+                localStorage.removeItem('skipLoading');
+                
+                setupEventListeners();
+                
+                // Navigate to target page (account by default)
+                const hash = window.location.hash.replace('#', '') || 'account';
+                if (['home', 'updates', 'account'].includes(hash)) {
+                    navigateTo(hash, false, true);
+                } else {
+                    navigateTo('account', false, true);
+                }
+                
+                initHistory();
+                return;
+            }
+            
+            // Normal splash screen flow
             // Show splash for 2 seconds
             setTimeout(function() {
                 splashScreen.classList.add('fade-out');
@@ -1083,15 +1150,13 @@
                     splashScreen.style.display = 'none';
                     mainApp.style.display = 'block';
                     setupEventListeners();
-                    loadHomeItems();
-                    checkLoginStatus();
                     
-                    // Handle URL hash
+                    // Handle URL hash - IMPORTANT: This must come before loadHomeItems
                     const hash = window.location.hash.replace('#', '');
                     if (hash && ['home', 'updates', 'account'].includes(hash)) {
-                        navigateTo(hash);
+                        navigateTo(hash, false, true); // Pass true for initial load
                     } else {
-                        navigateTo('home');
+                        navigateTo('home', false, true); // Pass true for initial load
                     }
                     
                     // Initialize history for back button handling
@@ -1208,8 +1273,8 @@
         }
 
         // Navigation functions
-        function navigateTo(page, fromBackButton = false) {
-            if (currentPage === page && !fromBackButton) return;
+        function navigateTo(page, fromBackButton = false, initialLoad = false) {
+            if (currentPage === page && !fromBackButton && !initialLoad) return;
             
             currentPage = page;
             
@@ -1225,29 +1290,36 @@
                 case 'home':
                     homePage.classList.add('active');
                     document.querySelector('.nav-bar button:nth-child(1)').classList.add('active');
-                    headerTitle.textContent = 'cMart';
+                    // Hide header title, show search/filter bar
+                    headerTitle.style.display = 'none';
                     searchFilterContainer.style.display = 'flex';
                     loadHomeItems();
                     break;
                 case 'updates':
                     updatesPage.classList.add('active');
                     document.querySelector('.nav-bar button:nth-child(2)').classList.add('active');
+                    // Show header title, hide search/filter bar
                     headerTitle.textContent = 'Updates';
+                    headerTitle.style.display = 'block';
                     searchFilterContainer.style.display = 'none';
                     break;
                 case 'account':
                     accountPage.classList.add('active');
                     document.querySelector('.nav-bar button:nth-child(3)').classList.add('active');
+                    // Show header title, hide search/filter bar
                     headerTitle.textContent = 'Account';
+                    headerTitle.style.display = 'block';
                     searchFilterContainer.style.display = 'none';
                     checkLoginStatus();
                     break;
             }
             
-            // Update URL hash and history
-            window.location.hash = page;
-            if (!fromBackButton) {
-                window.history.pushState({ page: page }, '', '#' + page);
+            // Update URL hash and history (only if not initial load)
+            if (!initialLoad) {
+                window.location.hash = page;
+                if (!fromBackButton) {
+                    window.history.pushState({ page: page }, '', '#' + page);
+                }
             }
             
             // Hide search results
@@ -1435,7 +1507,7 @@
                         <div class="product-card" onclick="showProductDetails('${product.id}')">
                             <div class="product-image">
                                 <img src="${product.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='}" 
-                                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='">
+                                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk1OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='">
                                 ${product.price ? `<div class="product-price">₦${product.price}</div>` : ''}
                                 ${admin ? `
                                     <div class="admin-delete-btn" onclick="event.stopPropagation(); deleteItem('${product.id}')">
@@ -1472,7 +1544,7 @@
                         <div class="service-card" onclick="showProductDetails('${service.id}')">
                             <div class="service-image">
                                 <img src="${service.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk1OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='}" 
-                                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk1OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='">
+                                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNQiIGZpbGw9IiM5NTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWFnZTwvdGV4dD48L3N2Zz4='">
                                 ${service.serviceType ? `<div class="service-type-badge">${service.serviceType}</div>` : ''}
                                 ${admin ? `
                                     <div class="admin-delete-btn" onclick="event.stopPropagation(); deleteItem('${service.id}')">
@@ -1519,8 +1591,8 @@
                     html += `
                         <div class="product-card" onclick="showProductDetails('${product.id}')">
                             <div class="product-image">
-                                <img src="${product.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='}" 
-                                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='">
+                                <img src="${product.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk1OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='}" 
+                                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk1OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='">
                                 ${product.price ? `<div class="product-price">₦${product.price}</div>` : ''}
                                 ${admin ? `
                                     <div class="admin-delete-btn" onclick="event.stopPropagation(); deleteItem('${product.id}')">
@@ -1548,7 +1620,7 @@
                     html += `
                         <div class="service-card" onclick="showProductDetails('${service.id}')">
                             <div class="service-image">
-                                <img src="${service.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk1OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='}" 
+                                <img src="${service.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk1OSIgdGV4dC1hbmNob3I9Im1pZHRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='}" 
                                      onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk1OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='">
                                 ${service.serviceType ? `<div class="service-type-badge">${service.serviceType}</div>` : ''}
                                 ${admin ? `
@@ -1584,7 +1656,7 @@
             }
             
             // Set modal content
-            modalImage.src = item.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+            modalImage.src = item.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk1OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
             modalImage.onerror = function() {
                 this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk1OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
             };

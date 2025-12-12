@@ -950,7 +950,9 @@
             }
         });
         
-        // Form submission handlers
+        // =============== FORM SUBMISSION HANDLERS - EDITED FOR FIX ===============
+        
+        // Sign In Form Submission
         document.getElementById('signinForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = document.getElementById('signinEmail').value.trim().toLowerCase();
@@ -966,6 +968,9 @@
                 localStorage.setItem('cmartCurrentUser', JSON.stringify(user));
                 errorElement.style.display = 'none';
                 
+                // ADDED: Set flag to skip loading in index.html
+                localStorage.setItem('skipLoading', 'true');
+                
                 // Redirect to index.html with account page
                 window.location.href = 'index.html#account';
             } else {
@@ -974,6 +979,7 @@
             }
         });
         
+        // Sign Up Form Submission
         document.getElementById('signupForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('signupName').value.trim();
@@ -1040,6 +1046,9 @@
             localStorage.setItem('cmartCurrentUser', JSON.stringify(newUser));
             
             errorElement.style.display = 'none';
+            
+            // ADDED: Set flag to skip loading in index.html
+            localStorage.setItem('skipLoading', 'true');
             
             // Redirect to index.html with account page
             window.location.href = 'index.html#account';
