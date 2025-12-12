@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advertise Service - cMart</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: whitesmoke;
+            color: #333;
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+        
+        header {
+            background-color: steelblue;
+            color: white;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+        }
+        
+        .app-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .back-button {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        main {
+            padding: 20px;
+            padding-bottom: 40px;
+        }
+        
+        .form-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .form-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-group { 
+            margin-bottom: 20px; 
+        }
+        
+        label { 
+            display: block; 
+            font-size: 14px; 
+            margin-bottom: 8px; 
+            font-weight: 500;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #c0392b;
+        }
+        
+        input[type="text"], input[type="url"], textarea, select {
+            width: 100%; 
+            padding: 14px; 
+            border-radius: 8px; 
+            border: 1px solid #e6e6e6; 
+            font-size: 16px;
+            background: #f9f9f9;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .image-upload {
+            border: 2px dashed #e6e6e6;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            background: #fbfbff;
+            cursor: pointer;
+        }
+        
+        .image-upload i {
+            font-size: 40px;
+            color: steelblue;
+            margin-bottom: 10px;
+        }
+        
+        .image-preview {
+            display: none;
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+        
+        .services-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .service-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #e6e6e6;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .service-option.selected {
+            border-color: steelblue;
+            background-color: #f0f7ff;
+        }
+        
+        .service-option input {
+            margin-right: 10px;
+        }
+        
+        .service-option i {
+            margin-right: 10px;
+            color: steelblue;
+        }
+        
+        .btn { 
+            display: block; 
+            width: 100%; 
+            padding: 15px; 
+            background: steelblue; 
+            color: #fff; 
+            border-radius: 8px; 
+            border: none; 
+            font-weight: 600; 
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        
+        .error { 
+            color: #c0392b; 
+            font-size: 14px; 
+            margin-top: 8px; 
+            padding: 8px 12px;
+            background: #ffeaea;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .success { 
+            color: #1e8f3e; 
+            font-size: 14px; 
+            margin-top: 8px; 
+            padding: 8px 12px;
+            background: #eaffea;
+            border-radius: 6px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="app-bar">
+            <a href="store.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                Back
+            </a>
+            <div class="logo">cMart</div>
+            <div style="width: 60px;"></div>
+        </div>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <div class="form-title">Advertise Your Service</div>
+            
+            <form id="advertForm">
+                <div class="form-group">
+                    <label class="required">Service Image</label>
+                    <div class="image-upload" id="imageUpload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div>Click to upload image</div>
+                    </div>
+                    <input type="file" id="serviceImage" accept="image/*" style="display: none;">
+                    <img id="imagePreview" class="image-preview" alt="Image preview">
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Brand Name</label>
+                    <input type="text" id="brandName" placeholder="Enter your brand name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Services You Offer</label>
+                    <div class="services-container" id="servicesContainer"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Contact Link</label>
+                    <input type="url" id="contactLink" placeholder="https://wa.me/1234567890" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Service Description</label>
+                    <textarea id="description" placeholder="Describe your services..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Location</label>
+                    <select id="location" required>
+                        <option value="">Select your campus</option>
+                        <option value="Uli Campus">Uli Campus</option>
+                        <option value="Igbariam Campus">Igbariam Campus</option>
+                        <option value="Awka Campus">Awka Campus</option>
+                    </select>
+                </div>
+                
+                <div class="error" id="formError"></div>
+                <div class="success" id="formSuccess"></div>
+                
+                <button type="submit" class="btn">Upload Service</button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        const currentUser = localStorage.getItem('cmartCurrentUser');
+        if (!currentUser) {
+            window.location.href = 'account.html';
+        }
+
+        const imageUpload = document.getElementById('imageUpload');
+        const serviceImage = document.getElementById('serviceImage');
+        const imagePreview = document.getElementById('imagePreview');
+        const advertForm = document.getElementById('advertForm');
+        const formError = document.getElementById('formError');
+        const formSuccess = document.getElementById('formSuccess');
+        const servicesContainer = document.getElementById('servicesContainer');
+
+        // Available services
+        const availableServices = [
+            { id: 'graphic_designing', name: 'Graphic Designing', icon: 'fas fa-paint-brush' },
+            { id: 'affiliate_marketing', name: 'Affiliate Marketing', icon: 'fas fa-share-alt' },
+            { id: 'payment_services', name: 'Payment Services', icon: 'fas fa-money-check-alt' },
+            { id: 'jeweries_ointments', name: 'Jeweries and Ointments', icon: 'fas fa-gem' },
+            { id: 'makeup_artist', name: 'Makeup Artist', icon: 'fas fa-palette' }
+        ];
+
+        // IndexedDB Configuration
+        const DB_NAME = 'cMartDB';
+        const DB_VERSION = 1;
+        const SERVICES_STORE = 'services';
+        let db = null;
+
+        // Initialize IndexedDB
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+                request.onupgradeneeded = (event) => {
+                    const database = event.target.result;
+                    if (!database.objectStoreNames.contains(SERVICES_STORE)) {
+                        database.createObjectStore(SERVICES_STORE, { keyPath: 'id' });
+                    }
+                };
+            });
+        }
+
+        // Save service to IndexedDB
+        async function saveServiceToDB(service) {
+            if (!db) await initDB();
+            
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([SERVICES_STORE], 'readwrite');
+                const store = transaction.objectStore(SERVICES_STORE);
+                const request = store.add(service);
+                
+                request.onsuccess = () => resolve(true);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // Check if we're in edit mode
+        const urlParams = new URLSearchParams(window.location.search);
+        const editId = urlParams.get('edit');
+        let editItem = null;
+        
+        if (editId) {
+            // Load existing service data
+            editItem = JSON.parse(localStorage.getItem('cmartEditItem'));
+            if (editItem) {
+                document.getElementById('brandName').value = editItem.brandName || '';
+                document.getElementById('contactLink').value = editItem.contactLink || '';
+                document.getElementById('description').value = editItem.description || '';
+                document.getElementById('location').value = editItem.location || '';
+                
+                if (editItem.image) {
+                    imagePreview.src = editItem.image;
+                    imagePreview.style.display = 'block';
+                    imageUpload.innerHTML = '<i class="fas fa-check-circle" style="color: #1e8f3e;"></i>';
+                }
+                
+                // Change form title and button text
+                document.querySelector('.form-title').textContent = 'Edit Service';
+                document.querySelector('.btn').textContent = 'Update Service';
+            }
+        }
+
+        // Initialize services selection
+        function initializeServices() {
+            servicesContainer.innerHTML = '';
+            
+            availableServices.forEach(service => {
+                const serviceOption = document.createElement('div');
+                serviceOption.className = 'service-option';
+                serviceOption.innerHTML = `
+                    <input type="checkbox" id="${service.id}" name="services" value="${service.id}">
+                    <i class="${service.icon}"></i>
+                    <span>${service.name}</span>
+                `;
+                
+                // Pre-select services if in edit mode
+                if (editId && editItem && editItem.services && editItem.services.includes(service.id)) {
+                    serviceOption.querySelector('input').checked = true;
+                    serviceOption.classList.add('selected');
+                }
+                
+                serviceOption.addEventListener('click', function() {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                    
+                    if (checkbox.checked) {
+                        this.classList.add('selected');
+                    } else {
+                        this.classList.remove('selected');
+                    }
+                });
+                
+                servicesContainer.appendChild(serviceOption);
+            });
+        }
+
+        // Image upload
+        imageUpload.addEventListener('click', () => serviceImage.click());
+
+        serviceImage.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                    imageUpload.innerHTML = '<i class="fas fa-check-circle" style="color: #1e8f3e;"></i>';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Form submission
+        advertForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const brandName = document.getElementById('brandName').value.trim();
+            const contactLink = document.getElementById('contactLink').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const location = document.getElementById('location').value;
+            const imageFile = serviceImage.files[0];
+            
+            // Get selected services
+            const selectedServices = [];
+            document.querySelectorAll('input[name="services"]:checked').forEach(checkbox => {
+                selectedServices.push(checkbox.value);
+            });
+
+            // Validation
+            if (!brandName || selectedServices.length === 0 || !contactLink || !description || !location) {
+                showError('Please fill all required fields');
+                return;
+            }
+
+            const user = JSON.parse(currentUser);
+            
+            // Create service - MODIFIED for edit mode
+            const service = {
+                id: editId || 'service_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                vendorName: user.name,
+                vendorEmail: user.email,
+                brandName: brandName,
+                services: selectedServices,
+                contactLink: contactLink,
+                description: description,
+                location: location,
+                timestamp: editId ? new Date().toISOString() : new Date().toISOString(),
+                image: imagePreview.src || (editId ? editItem.image : ''),
+                type: 'service'
+            };
+
+            try {
+                // Initialize database
+                await initDB();
+                
+                if (editId) {
+                    // Update existing service in IndexedDB
+                    const transaction = db.transaction([SERVICES_STORE], 'readwrite');
+                    const store = transaction.objectStore(SERVICES_STORE);
+                    await store.put(service);
+                    
+                    // Update localStorage
+                    updateLocalStorage(service, editId);
+                    
+                    showSuccess('Service updated successfully!');
+                } else {
+                    // Save to IndexedDB
+                    await saveServiceToDB(service);
+                    
+                    // Also save to localStorage for backward compatibility
+                    saveToLocalStorage(service);
+                    
+                    showSuccess('Service uploaded successfully!');
+                }
+                
+                setTimeout(() => window.location.href = 'store.html', 500);
+                
+            } catch (error) {
+                console.error('Upload error:', error);
+                showError('Operation failed. Please try again.');
+            }
+        });
+
+        function showError(message) {
+            formError.textContent = message;
+            formError.style.display = 'block';
+            formSuccess.style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            formSuccess.textContent = message;
+            formSuccess.style.display = 'block';
+            formError.style.display = 'none';
+        }
+
+        // Backward compatibility with localStorage
+        function saveToLocalStorage(service) {
+            try {
+                const services = JSON.parse(localStorage.getItem('cmartServices') || '[]');
+                services.unshift(service);
+                localStorage.setItem('cmartServices', JSON.stringify(services));
+                
+                const user = JSON.parse(currentUser);
+                const userEmail = user.email.replace(/[^a-zA-Z0-9]/g, '_');
+                const userStore = JSON.parse(localStorage.getItem('cmartServices_' + userEmail) || '[]');
+                userStore.unshift(service);
+                localStorage.setItem('cmartServices_' + userEmail, JSON.stringify(userStore));
+            } catch (error) {
+                console.warn('LocalStorage backup failed:', error);
+            }
+        }
+
+        // Helper function to update localStorage for edits
+        function updateLocalStorage(service, editId) {
+            try {
+                const user = JSON.parse(currentUser);
+                const userEmail = user.email.replace(/[^a-zA-Z0-9]/g, '_');
+                
+                // Update main services list
+                const services = JSON.parse(localStorage.getItem('cmartServices') || '[]');
+                const serviceIndex = services.findIndex(s => s.id === editId);
+                if (serviceIndex !== -1) {
+                    services[serviceIndex] = service;
+                    localStorage.setItem('cmartServices', JSON.stringify(services));
+                }
+                
+                // Update user's services
+                const userServices = JSON.parse(localStorage.getItem('cmartServices_' + userEmail) || '[]');
+                const userServiceIndex = userServices.findIndex(s => s.id === editId);
+                if (userServiceIndex !== -1) {
+                    userServices[userServiceIndex] = service;
+                    localStorage.setItem('cmartServices_' + userEmail, JSON.stringify(userServices));
+                }
+                
+                // Clear edit item
+                localStorage.removeItem('cmartEditItem');
+            } catch (error) {
+                console.warn('LocalStorage update failed:', error);
+            }
+        }
+
+        // Initialize services and database
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeServices();
+            initDB();
+        });
+    </script>
+</body>
+</html>
