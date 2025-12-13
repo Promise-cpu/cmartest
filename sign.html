@@ -25,14 +25,14 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         
-        /* Header Styles */
+        /* Header Styles - Matching home/account pages */
         header {
             background-color: steelblue;
             color: white;
-            padding: 15px;
             position: sticky;
             top: 0;
             z-index: 100;
+            padding: 10px 15px;
         }
         
         .app-bar {
@@ -59,8 +59,8 @@
         
         /* Main Content Styles */
         main {
-            padding: 20px;
-            padding-bottom: 30px;
+            padding: 15px 12px 70px 12px;
+            min-height: calc(100vh - 140px);
         }
         
         .auth-container {
@@ -294,7 +294,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Navigation Bar Styles */
+        /* Navigation Bar Styles - Matching home/account pages */
         .nav-bar {
             position: fixed;
             bottom: 0;
@@ -303,9 +303,9 @@
             background-color: white;
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
+            padding: 12px 0 10px 0;
             border-top: 1px solid #eee;
-            z-index: 100;
+            z-index: 99;
         }
         
         .nav-item {
@@ -315,7 +315,11 @@
             font-size: 12px;
             color: #777;
             text-decoration: none;
-            width: 33.33%;
+            width: 50%;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
         }
         
         .nav-item.active {
@@ -324,7 +328,7 @@
         
         .nav-icon {
             font-size: 20px;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         @media (max-width: 420px) {
@@ -345,10 +349,10 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
+    <!-- Header - Matching home/account pages -->
     <header>
         <div class="app-bar">
-            <a href="#" onclick="history.back(); return false;" class="back-button">
+            <a href="#" onclick="goBackOrHome(); return false;" class="back-button">
                 <i class="fas fa-arrow-left"></i>
                 Back
             </a>
@@ -558,20 +562,16 @@
         </div>
     </main>
 
-    <!-- Navigation Bar -->
+    <!-- Navigation Bar - Updated to 2 items only -->
     <div class="nav-bar">
-        <a href="index.html" class="nav-item">
+        <button class="nav-item" onclick="window.location.href='home.html'">
             <i class="fas fa-home nav-icon"></i>
             <span>Home</span>
-        </a>
-        <a href="index.html#updates" class="nav-item">
-            <i class="fas fa-sync-alt nav-icon"></i>
-            <span>Updates</span>
-        </a>
-        <a href="index.html#account" class="nav-item active">
+        </button>
+        <button class="nav-item active">
             <i class="fas fa-user nav-icon"></i>
             <span>Account</span>
-        </a>
+        </button>
     </div>
 
     <script>
@@ -622,6 +622,16 @@
         let resetMethod = ''; // 'email' or 'security'
         let securityQuestion = '';
         let securityAnswer = '';
+        
+        // Function to go back or to home page
+        function goBackOrHome() {
+            const referrer = document.referrer;
+            if (referrer && referrer.includes(window.location.hostname)) {
+                history.back();
+            } else {
+                window.location.href = 'home.html';
+            }
+        }
         
         // Security question change handler
         securityQuestionSelect.addEventListener('change', function() {
@@ -950,7 +960,7 @@
             }
         });
         
-        // =============== FORM SUBMISSION HANDLERS - EDITED FOR FIX ===============
+        // =============== FORM SUBMISSION HANDLERS - UPDATED ===============
         
         // Sign In Form Submission
         document.getElementById('signinForm').addEventListener('submit', function(e) {
@@ -968,11 +978,8 @@
                 localStorage.setItem('cmartCurrentUser', JSON.stringify(user));
                 errorElement.style.display = 'none';
                 
-                // ADDED: Set flag to skip loading in index.html
-                localStorage.setItem('skipLoading', 'true');
-                
-                // Redirect to index.html with account page
-                window.location.href = 'index.html#account';
+                // Redirect to account.html (not index.html)
+                window.location.href = 'account.html';
             } else {
                 errorElement.textContent = 'Invalid email or password. Please try again.';
                 errorElement.style.display = 'block';
@@ -1047,11 +1054,8 @@
             
             errorElement.style.display = 'none';
             
-            // ADDED: Set flag to skip loading in index.html
-            localStorage.setItem('skipLoading', 'true');
-            
-            // Redirect to index.html with account page
-            window.location.href = 'index.html#account';
+            // Redirect to account.html (not index.html)
+            window.location.href = 'account.html';
         });
         
         // Forgot Password - Step 2a: Email Method - Enter Email

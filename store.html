@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Products & Services - cMart</title>
+    <title>My Brand - cMart</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -86,50 +86,50 @@
             text-align: center;
         }
         
-        .products-grid {
+        .brands-grid {
             display: grid;
             gap: 15px;
         }
         
-        .product-card {
+        .brand-card {
             background: white;
             border-radius: 12px;
             overflow: hidden;
             position: relative;
         }
         
-        .product-image {
+        .brand-image {
             width: 100%;
             height: 180px;
             object-fit: cover;
         }
         
-        .product-content {
+        .brand-content {
             padding: 15px;
         }
         
-        .product-name {
+        .brand-name {
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 8px;
             color: #333;
         }
         
-        .product-description {
+        .brand-description {
             font-size: 14px;
             margin-bottom: 10px;
             line-height: 1.4;
             color: #666;
         }
         
-        .product-meta {
+        .brand-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
         }
         
-        .product-location {
+        .brand-location {
             font-size: 12px;
             color: steelblue;
             background: #f0f7ff;
@@ -137,13 +137,22 @@
             border-radius: 12px;
         }
         
-        .product-price {
-            font-size: 14px;
-            color: #2ecc71;
-            font-weight: 600;
+        .brand-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
         }
         
-        .product-actions {
+        .category-tag {
+            font-size: 10px;
+            color: #666;
+            background: #f5f5f5;
+            padding: 3px 8px;
+            border-radius: 12px;
+        }
+        
+        .brand-actions {
             display: flex;
             gap: 8px;
             border-top: 1px solid #f5f5f5;
@@ -177,38 +186,43 @@
         }
 
         .upload-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            display: flex;
+            justify-content: center;
             margin-bottom: 20px;
         }
         
         .upload-card {
             background: white;
             border-radius: 12px;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            max-width: 300px;
+            border: 2px dashed #e6e6e6;
         }
         
         .upload-card:hover {
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: steelblue;
         }
         
         .upload-icon {
-            font-size: 30px;
-            margin-bottom: 10px;
+            font-size: 40px;
+            margin-bottom: 15px;
             color: steelblue;
         }
         
         .upload-title {
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            font-size: 18px;
         }
         
         .upload-description {
-            font-size: 12px;
+            font-size: 14px;
             color: #666;
             line-height: 1.4;
         }
@@ -233,7 +247,7 @@
             background-color: white;
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
+            padding: 12px 0 10px 0;
             border-top: 1px solid #eee;
             z-index: 100;
         }
@@ -245,7 +259,11 @@
             font-size: 12px;
             color: #777;
             text-decoration: none;
-            width: 33.33%;
+            width: 50%;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
         }
         
         .nav-item.active {
@@ -254,7 +272,7 @@
         
         .nav-icon {
             font-size: 20px;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
         
         .message {
@@ -271,12 +289,32 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             display: none;
         }
+
+        .info-box {
+            background: #eaf7ff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .info-box h3 {
+            color: #3498db;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .info-box p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="app-bar">
-            <a href="#" onclick="history.back(); return false;" class="back-button">
+            <a href="#" onclick="goBackOrHome(); return false;" class="back-button">
                 <i class="fas fa-arrow-left"></i>
                 Back
             </a>
@@ -286,55 +324,59 @@
     </header>
 
     <main>
-        <h1 class="page-title">My Products and Services</h1>
+        <h1 class="page-title">My Brand</h1>
+        
+        <div class="info-box">
+            <h3><i class="fas fa-lightbulb"></i> Manage Your Brand</h3>
+            <p>Advertise your brand and services to reach more customers. Add specific categories that customers might search for.</p>
+        </div>
         
         <div class="upload-section">
             <div class="upload-card" onclick="window.location.href='advert.html'">
                 <div class="upload-icon">
-                    <i class="fas fa-box"></i>
+                    <i class="fas fa-bullhorn"></i>
                 </div>
-                <div class="upload-title">Advertise Products</div>
-                <div class="upload-description">List items to sell or trade</div>
-            </div>
-            
-            <div class="upload-card" onclick="window.location.href='service.html'">
-                <div class="upload-icon">
-                    <i class="fas fa-concierge-bell"></i>
-                </div>
-                <div class="upload-title">Advertise Services</div>
-                <div class="upload-description">Promote your skills and services</div>
+                <div class="upload-title">Advertise Your Brand</div>
+                <div class="upload-description">Promote your brand, services, and expertise to reach customers</div>
             </div>
         </div>
         
-        <div id="productsContainer"></div>
+        <div id="brandsContainer"></div>
     </main>
 
     <div id="message" class="message"></div>
 
+    <!-- Navigation Bar - Updated to 2 items only -->
     <div class="nav-bar">
-        <a href="home.html" class="nav-item">
+        <button class="nav-item" onclick="window.location.href='home.html'">
             <i class="fas fa-home nav-icon"></i>
             <span>Home</span>
-        </a>
-        <a href="updates.html" class="nav-item">
-            <i class="fas fa-sync-alt nav-icon"></i>
-            <span>Updates</span>
-        </a>
-        <a href="account.html" class="nav-item active">
-            <i class="fas fa-user nav-icon"></i>
-            <span>Account</span>
-        </a>
+        </button>
+        <button class="nav-item active">
+            <i class="fas fa-store nav-icon"></i>
+            <span>My Brand</span>
+        </button>
     </div>
 
     <script>
         // Check if user is logged in
         const currentUser = localStorage.getItem('cmartCurrentUser');
         if (!currentUser) {
-            window.location.href = 'home.html#account';
+            window.location.href = 'home.html';
         }
 
-        const productsContainer = document.getElementById('productsContainer');
+        const brandsContainer = document.getElementById('brandsContainer');
         const message = document.getElementById('message');
+
+        // Function to go back or to home page
+        function goBackOrHome() {
+            const referrer = document.referrer;
+            if (referrer && referrer.includes(window.location.hostname)) {
+                history.back();
+            } else {
+                window.location.href = 'home.html';
+            }
+        }
 
         // Show message function
         function showMessage(text, type = 'success') {
@@ -347,38 +389,37 @@
             }, 3000);
         }
 
-        // Get ALL items from localStorage (for deletion from main storage)
+        // Get ALL items from localStorage (focus on brands/services)
         function getAllItems() {
             try {
                 const allItems = [];
                 const seenIds = new Set();
                 
-                // Get main products and services
-                const mainProducts = JSON.parse(localStorage.getItem('cmartProducts') || '[]');
+                // Get main brands/services (no longer using products)
                 const mainServices = JSON.parse(localStorage.getItem('cmartServices') || '[]');
                 
                 // Add items without duplicates
-                [...mainProducts, ...mainServices].forEach(item => {
+                mainServices.forEach(item => {
                     if (item.id && !seenIds.has(item.id)) {
                         seenIds.add(item.id);
                         allItems.push({
                             ...item,
-                            type: item.price ? 'product' : 'service'
+                            type: 'brand'
                         });
                     }
                 });
                 
-                // Check user-specific stores
+                // Check user-specific services stores
                 for (let i = 0; i < localStorage.length; i++) {
                     const key = localStorage.key(i);
-                    if (key.startsWith('cmartStore_') || key.startsWith('cmartServices_')) {
+                    if (key.startsWith('cmartServices_')) {
                         const userItems = JSON.parse(localStorage.getItem(key) || '[]');
                         userItems.forEach(item => {
                             if (item.id && !seenIds.has(item.id)) {
                                 seenIds.add(item.id);
                                 allItems.push({
                                     ...item,
-                                    type: item.price ? 'product' : 'service'
+                                    type: 'brand'
                                 });
                             }
                         });
@@ -392,73 +433,80 @@
             }
         }
 
-        // Load user's items from ALL storage locations
-        function loadUserItems() {
+        // Load user's brands from ALL storage locations
+        function loadUserBrands() {
             if (!currentUser) return;
             
             const user = JSON.parse(currentUser);
             const userEmail = user.email;
-            const userEmailKey = user.email.replace(/[^a-zA-Z0-9]/g, '_');
             
             // Get all items and filter by current user
             const allItems = getAllItems();
-            const userItems = allItems.filter(item => 
+            const userBrands = allItems.filter(item => 
                 item.vendorEmail === userEmail || 
                 item.email === userEmail ||
                 item.userEmail === userEmail
             );
             
-            displayUserItems(userItems);
+            displayUserBrands(userBrands);
         }
 
-        function displayUserItems(items) {
-            if (items.length === 0) {
-                productsContainer.innerHTML = `
+        function displayUserBrands(brands) {
+            if (brands.length === 0) {
+                brandsContainer.innerHTML = `
                     <div class="empty-state">
-                        <i class="fas fa-box-open"></i>
-                        <p>You haven't uploaded any products or services yet.</p>
-                        <p style="margin-top: 10px; font-size: 14px;">Click on the cards above to start advertising!</p>
+                        <i class="fas fa-bullhorn"></i>
+                        <p>You haven't advertised your brand yet.</p>
+                        <p style="margin-top: 10px; font-size: 14px;">Click on "Advertise Your Brand" above to get started!</p>
                     </div>
                 `;
                 return;
             }
             
             // Sort by date (newest first)
-            items.sort((a, b) => {
+            brands.sort((a, b) => {
                 const dateA = new Date(a.timestamp || a.date || 0);
                 const dateB = new Date(b.timestamp || b.date || 0);
                 return dateB - dateA;
             });
             
-            productsContainer.innerHTML = `
-                <div class="products-grid">
-                    ${items.map(item => {
-                        const isProduct = item.price !== undefined;
-                        const itemName = item.productName || item.brandName || item.serviceType || 'Untitled';
-                        const itemDescription = item.description || 'No description provided';
-                        const itemLocation = item.location || 'Location not specified';
-                        const itemPrice = item.price ? ₦${item.price} : null;
-                        const itemImage = item.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBhdmFpbGFibGU8L3RleHQ+PC9zdmc+';
+            brandsContainer.innerHTML = `
+                <div class="brands-grid">
+                    ${brands.map(brand => {
+                        const brandName = brand.brandName || brand.serviceType || 'My Brand';
+                        const brandDescription = brand.description || 'No description provided';
+                        const brandLocation = brand.location || 'Location not specified';
+                        const brandCategories = brand.categories || [];
+                        const brandImage = brand.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkJyYW5kIGltYWdlPC90ZXh0Pjwvc3ZnPg==';
                         
                         return `
-                        <div class="product-card">
+                        <div class="brand-card">
                             <div style="position: relative;">
-                                <img src="${itemImage}" class="product-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBhdmFpbGFibGU8L3RleHQ+PC9zdmc+'">
-                                <span class="item-type-badge">${isProduct ? 'Product' : 'Service'}</span>
+                                <img src="${brandImage}" class="brand-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkJyYW5kIGltYWdlPC90ZXh0Pjwvc3ZnPg=='">
+                                <span class="item-type-badge">Brand</span>
                             </div>
-                            <div class="product-content">
-                                <div class="product-name">${itemName}</div>
-                                <div class="product-description">${itemDescription}</div>
-                                <div class="product-meta">
-                                    <span class="product-location">${itemLocation}</span>
-                                    ${itemPrice ? <span class="product-price">${itemPrice}</span> : ''}
+                            <div class="brand-content">
+                                <div class="brand-name">${brandName}</div>
+                                <div class="brand-description">${brandDescription}</div>
+                                
+                                ${brandCategories.length > 0 ? `
+                                    <div class="brand-categories">
+                                        ${brandCategories.slice(0, 3).map(category => `
+                                            <span class="category-tag">${category}</span>
+                                        `).join('')}
+                                        ${brandCategories.length > 3 ? `<span class="category-tag">+${brandCategories.length - 3} more</span>` : ''}
+                                    </div>
+                                ` : ''}
+                                
+                                <div class="brand-meta">
+                                    <span class="brand-location">${brandLocation}</span>
                                 </div>
-                                <div class="product-actions">
-                                    <button class="action-btn edit-btn" onclick="editItem('${item.id}', ${isProduct})">
+                                <div class="brand-actions">
+                                    <button class="action-btn edit-btn" onclick="editBrand('${brand.id}')">
                                         <i class="fas fa-edit"></i>
                                         Edit
                                     </button>
-                                    <button class="action-btn delete-btn" onclick="deleteItem('${item.id}', ${isProduct})">
+                                    <button class="action-btn delete-btn" onclick="deleteBrand('${brand.id}')">
                                         <i class="fas fa-trash"></i>
                                         Delete
                                     </button>
@@ -471,9 +519,9 @@
             `;
         }
 
-        // Delete item function - FIXED: Deletes from ALL storage locations
-        function deleteItem(itemId, isProduct) {
-            if (!confirm('Are you sure you want to delete this item? This action cannot be undone.')) {
+        // Delete brand function
+        function deleteBrand(brandId) {
+            if (!confirm('Are you sure you want to delete this brand? This action cannot be undone.')) {
                 return;
             }
             
@@ -484,10 +532,8 @@
                 
                 // Delete from ALL possible storage locations
                 const keysToCheck = [
-                    'cmartProducts',
                     'cmartServices',
-                    cmartStore_${userEmailKey},
-                    cmartServices_${userEmailKey}
+                    `cmartServices_${userEmailKey}`
                 ];
                 
                 let deleted = false;
@@ -497,80 +543,72 @@
                     try {
                         let items = JSON.parse(localStorage.getItem(key) || '[]');
                         const originalLength = items.length;
-                        items = items.filter(item => item.id !== itemId);
+                        items = items.filter(item => item.id !== brandId);
                         
                         if (items.length !== originalLength) {
                             localStorage.setItem(key, JSON.stringify(items));
                             deleted = true;
                         }
                     } catch (e) {
-                        console.error(Error deleting from ${key}:, e);
+                        console.error(`Error deleting from ${key}:`, e);
                     }
                 });
                 
                 // Also check other user stores that might have this item
                 for (let i = 0; i < localStorage.length; i++) {
                     const key = localStorage.key(i);
-                    if ((key.startsWith('cmartStore_') || key.startsWith('cmartServices_')) && !keysToCheck.includes(key)) {
+                    if (key.startsWith('cmartServices_') && !keysToCheck.includes(key)) {
                         try {
                             let items = JSON.parse(localStorage.getItem(key) || '[]');
                             const originalLength = items.length;
-                            items = items.filter(item => item.id !== itemId);
+                            items = items.filter(item => item.id !== brandId);
                             
                             if (items.length !== originalLength) {
                                 localStorage.setItem(key, JSON.stringify(items));
                                 deleted = true;
                             }
                         } catch (e) {
-                            console.error(Error deleting from ${key}:, e);
+                            console.error(`Error deleting from ${key}:`, e);
                         }
                     }
                 }
                 
                 if (deleted) {
-                    showMessage('Item deleted successfully!');
-                    // Reload items after a short delay
-                    setTimeout(loadUserItems, 500);
+                    showMessage('Brand deleted successfully!');
+                    // Reload brands after a short delay
+                    setTimeout(loadUserBrands, 500);
                 } else {
-                    showMessage('Item not found in storage', 'error');
+                    showMessage('Brand not found in storage', 'error');
                 }
                 
             } catch (error) {
-                console.error('Error deleting item:', error);
-                showMessage('Error deleting item. Please try again.', 'error');
+                console.error('Error deleting brand:', error);
+                showMessage('Error deleting brand. Please try again.', 'error');
             }
         }
 
-        // Edit item function - FIXED: Properly redirects to edit pages
-        function editItem(itemId, isProduct) {
-            // First, find the item in storage
-            const user = JSON.parse(currentUser);
-            const userEmail = user.email;
-            
+        // Edit brand function
+        function editBrand(brandId) {
             // Get all items
             const allItems = getAllItems();
-            const item = allItems.find(i => i.id === itemId);
+            const brand = allItems.find(i => i.id === brandId);
             
-            if (!item) {
-                showMessage('Item not found', 'error');
+            if (!brand) {
+                showMessage('Brand not found', 'error');
                 return;
             }
             
-            // Store the item data for editing
-            localStorage.setItem('cmartEditItem', JSON.stringify(item));
+            // Store the brand data for editing
+            localStorage.setItem('cmartEditItem', JSON.stringify(brand));
             
-            // Redirect to appropriate edit page
-            if (isProduct) {
-                window.location.href = advert.html?edit=${itemId};
-            } else {
-                window.location.href = service.html?edit=${itemId};
-            }
+            // Redirect to edit page
+            window.location.href = `advert.html?edit=${brandId}`;
         }
 
-        // Load items when page loads
-       document.addEventListener('DOMContentLoaded', loadUserItems)
+        // Load brands when page loads
+        document.addEventListener('DOMContentLoaded', loadUserBrands);
         // Also reload when coming back from other pages
-        window.addEventListener('pageshow', loadUserItems);
+        window.addEventListener('pageshow', loadUserBrands);
     </script>
 </body>
 </html>
