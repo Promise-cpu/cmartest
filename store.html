@@ -47,6 +47,7 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            cursor: pointer;
         }
         
         main {
@@ -245,6 +246,9 @@
             color: #777;
             text-decoration: none;
             width: 33.33%;
+            cursor: pointer;
+            background: none;
+            border: none;
         }
         
         .nav-item.active {
@@ -275,7 +279,7 @@
 <body>
     <header>
         <div class="app-bar">
-            <a href="#" onclick="history.back(); return false;" class="back-button">
+            <a href="#" onclick="goBackToIndex(); return false;" class="back-button">
                 <i class="fas fa-arrow-left"></i>
                 Back
             </a>
@@ -311,25 +315,37 @@
     <div id="message" class="message"></div>
 
     <div class="nav-bar">
-        <a href="home.html" class="nav-item">
+        <button class="nav-item" onclick="navigateToPage('home')">
             <i class="fas fa-home nav-icon"></i>
             <span>Home</span>
-        </a>
-        <a href="updates.html" class="nav-item">
+        </button>
+        <button class="nav-item" onclick="navigateToPage('updates')">
             <i class="fas fa-sync-alt nav-icon"></i>
             <span>Updates</span>
-        </a>
-        <a href="account.html" class="nav-item active">
+        </button>
+        <button class="nav-item active" onclick="navigateToPage('account')">
             <i class="fas fa-user nav-icon"></i>
             <span>Account</span>
-        </a>
+        </button>
     </div>
 
     <script>
+        // Global function to navigate back to index.html SPA
+        function goBackToIndex() {
+            // Always go back to index.html with account page pre-selected
+            window.location.href = 'index.html?page=account';
+        }
+
+        // Global function to navigate to index.html pages
+        function navigateToPage(page) {
+            // Navigate to index.html with specific page parameter
+            window.location.href = `index.html?page=${page}`;
+        }
+
         // Check if user is logged in
         const currentUser = localStorage.getItem('cmartCurrentUser');
         if (!currentUser) {
-            window.location.href = 'home.html#account';
+            window.location.href = 'index.html?page=account';
         }
 
         const productsContainer = document.getElementById('productsContainer');
@@ -397,7 +413,6 @@
             
             const user = JSON.parse(currentUser);
             const userEmail = user.email;
-            const userEmailKey = user.email.replace(/[^a-zA-Z0-9]/g, '_');
             
             // Get all items and filter by current user
             const allItems = getAllItems();
@@ -470,7 +485,7 @@
             `;
         }
 
-        // Delete item function - FIXED: Deletes from ALL storage locations
+        // Delete item function
         function deleteItem(itemId, isProduct) {
             if (!confirm('Are you sure you want to delete this item? This action cannot be undone.')) {
                 return;
@@ -540,7 +555,7 @@
             }
         }
 
-        // Edit item function - FIXED: Properly redirects to edit pages
+        // Edit item function
         function editItem(itemId, isProduct) {
             // First, find the item in storage
             const user = JSON.parse(currentUser);
@@ -558,6 +573,9 @@
             // Store the item data for editing
             localStorage.setItem('cmartEditItem', JSON.stringify(item));
             
+            // Store the current page URL for back navigation
+            sessionStorage.setItem('previousPage', 'store.html');
+            
             // Redirect to appropriate edit page
             if (isProduct) {
                 window.location.href = `advert.html?edit=${itemId}`;
@@ -566,11 +584,41 @@
             }
         }
 
+        // Handle browser back button
+        window.addEventListener('popstate', function(event) {
+            // When back button is pressed, go back to index.html#account
+            if (!event.state || event.state.page !== 'store') {
+                window.location.href = 'index.html?page=account';
+            }
+        });
+
+        // Push state to history
+        window.history.replaceState({ page: 'store' }, '', 'store.html');
+        
+        // Add history entry for back button
+        window.history.pushState({ page: 'store' }, '', 'store.html');
+
         // Load items when page loads
-        document.addEventListener('DOMContentLoaded', loadUserItems);
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserItems();
+            
+            // Restore scroll position if available
+            const savedScrollPosition = sessionStorage.getItem('scrollPosition');
+            if (savedScrollPosition) {
+                setTimeout(() => {
+                    window.scrollTo(0, parseInt(savedScrollPosition));
+                    sessionStorage.removeItem('scrollPosition');
+                }, 100);
+            }
+        });
         
         // Also reload when coming back from other pages
         window.addEventListener('pageshow', loadUserItems);
+        
+        // Clean up session storage on page unload
+        window.addEventListener('beforeunload', function() {
+            sessionStorage.removeItem('scrollPosition');
+        });
     </script>
 </body>
 </html>
