@@ -2,11 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account - cMart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>cMart - Account</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -16,38 +20,32 @@
         body {
             background-color: whitesmoke;
             color: #333;
-            max-width: 500px;
-            margin: 0 auto;
             min-height: 100vh;
         }
         
-        header {
+        /* Page Header */
+        .page-header {
             background-color: steelblue;
             color: white;
-            padding: 15px;
             position: sticky;
             top: 0;
-        }
-        
-        .app-bar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 24px;
+            z-index: 100;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
             font-weight: bold;
         }
         
+        /* Main Content */
         main {
-            padding-bottom: 70px;
-            padding-top: 10px;
+            padding: 15px 12px 70px 12px;
+            min-height: calc(100vh - 140px);
         }
         
-        .section {
+        /* Account Page */
+        .account-content .section {
             background-color: white;
-            margin: 15px;
+            margin: 15px 0;
             padding: 15px;
             border-radius: 12px;
         }
@@ -95,6 +93,7 @@
             text-decoration: none;
             font-size: 15px;
             text-align: center;
+            cursor: pointer;
         }
         
         .btn.secondary { 
@@ -130,17 +129,22 @@
         .list-arrow { 
             color: #999; 
         }
-
+        
+        .hidden { 
+            display: none; 
+        }
+        
+        /* Navigation Bar */
         .nav-bar {
             position: fixed;
             bottom: 0;
             width: 100%;
-            max-width: 500px;
             background-color: white;
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
+            padding: 12px 0 10px 0;
             border-top: 1px solid #eee;
+            z-index: 99;
         }
         
         .nav-item {
@@ -150,7 +154,11 @@
             font-size: 12px;
             color: #777;
             text-decoration: none;
-            width: 33.33%;
+            width: 50%;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
         }
         
         .nav-item.active {
@@ -159,88 +167,87 @@
         
         .nav-icon {
             font-size: 20px;
-            margin-bottom: 5px;
-        }
-
-        .hidden { 
-            display: none; 
+            margin-bottom: 4px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="app-bar">
-            <div class="logo">cMart</div>
-        </div>
-    </header>
-
+    <!-- Page Header -->
+    <div class="page-header">Account</div>
+    
+    <!-- Main Content Area -->
     <main>
-        <div class="section welcome-section" id="welcomeSection">
-            <div class="welcome-title" id="welcomeTitle">Welcome to cMart</div>
-            <div class="welcome-subtitle" id="welcomeSubtitle">Please sign in to access your account</div>
-            <div class="auth-buttons" id="authButtons">
-                <a href="sign.html?action=signin" class="btn">Sign In</a>
-                <a href="sign.html?action=signup" class="btn secondary">Create Account</a>
+        <div class="account-content">
+            <div class="section welcome-section" id="welcomeSection">
+                <div class="welcome-title" id="welcomeTitle">Welcome to cMart</div>
+                <div class="welcome-subtitle" id="welcomeSubtitle">Please sign in to access your account</div>
+                <div class="auth-buttons" id="authButtons">
+                    <a href="sign.html?action=signin" class="btn">Sign In</a>
+                    <a href="sign.html?action=signup" class="btn secondary">Create Account</a>
+                </div>
             </div>
-        </div>
 
-        <div class="section" id="advertiseSection">
-            <div class="section-header">
-                <div class="section-title">Advertise Products & Services</div>
+            <div class="section" id="advertiseSection">
+                <div class="section-header">
+                    <div class="section-title">Advertise Products & Services</div>
+                </div>
+                <div class="list-item" id="advertiseItem">
+                    <div class="list-icon"><i class="fas fa-bullhorn"></i></div>
+                    <div class="list-text">Promote your business on cMart</div>
+                    <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
+                </div>
             </div>
-            <div class="list-item" id="advertiseItem">
-                <div class="list-icon"><i class="fas fa-bullhorn"></i></div>
-                <div class="list-text">Promote your business on cMart</div>
-                <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
-            </div>
-        </div>
 
-        <div class="section" id="supportSection">
-            <div class="section-header">
-                <div class="section-title">Support</div>
+            <div class="section" id="supportSection">
+                <div class="section-header">
+                    <div class="section-title">Support</div>
+                </div>
+                <div class="list-item">
+                    <div class="list-icon"><i class="fas fa-question-circle"></i></div>
+                    <div class="list-text">Help Center</div>
+                    <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
+                </div>
+                <div class="list-item">
+                    <div class="list-icon"><i class="fas fa-comments"></i></div>
+                    <div class="list-text">Contact Us</div>
+                    <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
+                </div>
+                <div class="list-item" id="editProfileBtn">
+                    <div class="list-icon"><i class="fas fa-user-edit"></i></div>
+                    <div class="list-text">Edit Profile</div>
+                    <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
+                </div>
             </div>
-            <div class="list-item">
-                <div class="list-icon"><i class="fas fa-question-circle"></i></div>
-                <div class="list-text">Help Center</div>
-                <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
-            </div>
-            <div class="list-item">
-                <div class="list-icon"><i class="fas fa-comments"></i></div>
-                <div class="list-text">Contact Us</div>
-                <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
-            </div>
-            <div class="list-item" id="editProfileBtn">
-                <div class="list-icon"><i class="fas fa-user-edit"></i></div>
-                <div class="list-text">Edit Profile</div>
-                <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
-            </div>
-        </div>
 
-        <div class="section hidden" id="logoutSection">
-            <div class="list-item" id="logoutBtn">
-                <div class="list-icon"><i class="fas fa-sign-out-alt"></i></div>
-                <div class="list-text">Logout</div>
-                <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
+            <div class="section hidden" id="logoutSection">
+                <div class="list-item" id="logoutBtn">
+                    <div class="list-icon"><i class="fas fa-sign-out-alt"></i></div>
+                    <div class="list-text">Logout</div>
+                    <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
+                </div>
             </div>
         </div>
     </main>
-
+    
+    <!-- Navigation Bar -->
     <div class="nav-bar">
-        <a href="home.html" class="nav-item">
+        <button class="nav-item" onclick="window.location.href='home.html'">
             <i class="fas fa-home nav-icon"></i>
             <span>Home</span>
-        </a>
-        <a href="updates.html" class="nav-item">
-            <i class="fas fa-sync-alt nav-icon"></i>
-            <span>Updates</span>
-        </a>
-        <a href="account.html" class="nav-item active">
+        </button>
+        <button class="nav-item active">
             <i class="fas fa-user nav-icon"></i>
             <span>Account</span>
-        </a>
+        </button>
     </div>
 
     <script>
+        // Initialize application
+        function initApp() {
+            checkLoginStatus();
+        }
+
+        // Check login status for account page
         function checkLoginStatus() {
             const user = localStorage.getItem('cmartCurrentUser');
             const welcomeTitle = document.getElementById('welcomeTitle');
@@ -250,15 +257,20 @@
             const advertiseItem = document.getElementById('advertiseItem');
             
             if (user) {
-                const userData = JSON.parse(user);
-                welcomeTitle.textContent = 'Welcome back, ' + userData.name + '!';
-                welcomeSubtitle.textContent = 'You are signed in to your account';
-                authButtons.classList.add('hidden');
-                logoutSection.classList.remove('hidden');
-                
-                advertiseItem.onclick = function() {
-                    window.location.href = 'store.html';
-                };
+                try {
+                    const userData = JSON.parse(user);
+                    welcomeTitle.textContent = 'Welcome back, ' + userData.name + '!';
+                    welcomeSubtitle.textContent = 'You are signed in to your account';
+                    authButtons.classList.add('hidden');
+                    logoutSection.classList.remove('hidden');
+                    
+                    advertiseItem.onclick = function() {
+                        window.location.href = 'store.html';
+                    };
+                } catch (e) {
+                    localStorage.removeItem('cmartCurrentUser');
+                    checkLoginStatus();
+                }
             } else {
                 welcomeTitle.textContent = 'Welcome to cMart';
                 welcomeSubtitle.textContent = 'Please sign in to access your account';
@@ -269,15 +281,54 @@
                     alert('Please create an account or sign in to advertise your products and services on cMart.');
                 };
             }
+            
+            // Setup logout button
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.onclick = function() {
+                    localStorage.removeItem('cmartCurrentUser');
+                    checkLoginStatus();
+                    showMessage('You have been logged out successfully', 'success');
+                };
+            }
+            
+            // Setup edit profile button
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            if (editProfileBtn) {
+                editProfileBtn.onclick = function() {
+                    alert('Edit profile functionality would be implemented here.');
+                };
+            }
         }
 
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            localStorage.removeItem('cmartCurrentUser');
-            checkLoginStatus();
-            alert('You have been logged out successfully.');
-        });
+        // Show message function
+        function showMessage(message, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${type === 'success' ? '#1e8f3e' : '#c0392b'};
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                z-index: 10000;
+                font-weight: 600;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            `;
+            messageDiv.textContent = message;
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                if (document.body.contains(messageDiv)) {
+                    document.body.removeChild(messageDiv);
+                }
+            }, 3000);
+        }
 
-        document.addEventListener('DOMContentLoaded', checkLoginStatus);
+        // Initial load
+        document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>

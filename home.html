@@ -38,24 +38,6 @@
             padding: 10px 15px;
         }
         
-        /* Page Headers */
-        .page-header {
-            background-color: steelblue;
-            color: white;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 15px;
-            text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-            display: none;
-        }
-        
-        .page-header.active {
-            display: block;
-        }
-        
         .search-filter-container {
             display: flex;
             gap: 10px;
@@ -109,14 +91,6 @@
         main {
             padding: 15px 12px 70px 12px;
             min-height: calc(100vh - 140px);
-        }
-        
-        .page-container {
-            display: none;
-        }
-        
-        .page-container.active {
-            display: block;
         }
         
         /* Products Grid */
@@ -345,7 +319,7 @@
             font-size: 12px;
             color: #777;
             text-decoration: none;
-            width: 33.33%;
+            width: 50%;
             background: none;
             border: none;
             cursor: pointer;
@@ -531,108 +505,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        /* Updates Page */
-        .updates-content {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: calc(100vh - 140px);
-        }
-        
-        /* Account Page */
-        .account-content .section {
-            background-color: white;
-            margin: 15px 0;
-            padding: 15px;
-            border-radius: 12px;
-        }
-        
-        .section-header {
-            margin-bottom: 15px;
-        }
-        
-        .section-title {
-            font-size: 20px;
-            font-weight: bold;
-        }
-        
-        .welcome-section {
-            text-align: center;
-            padding: 25px 20px;
-        }
-        
-        .welcome-title {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .welcome-subtitle {
-            color: #777;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-        
-        .auth-buttons {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
-        
-        .btn { 
-            display: inline-block; 
-            padding: 12px 20px; 
-            background: steelblue; 
-            color: #fff; 
-            border-radius: 8px; 
-            border: none; 
-            font-weight: 600; 
-            text-decoration: none;
-            font-size: 15px;
-            text-align: center;
-            cursor: pointer;
-        }
-        
-        .btn.secondary { 
-            background: #fff; 
-            color: steelblue; 
-            border: 1px solid #cfe3ff; 
-        }
-
-        .list-item { 
-            display: flex; 
-            align-items: center; 
-            padding: 12px 0; 
-            border-bottom: 1px solid #f5f5f5; 
-            cursor: pointer;
-        }
-        
-        .list-item:last-child { 
-            border-bottom: none; 
-        }
-        
-        .list-icon { 
-            width: 24px; 
-            margin-right: 15px; 
-            color: steelblue; 
-            text-align: center; 
-        }
-        
-        .list-text { 
-            flex: 1; 
-            font-size: 16px; 
-        }
-        
-        .list-arrow { 
-            color: #999; 
-        }
-        
-        .hidden { 
-            display: none; 
-        }
     </style>
 </head>
 <body>
@@ -653,80 +525,9 @@
         </div>
     </header>
     
-    <!-- Page Headers for Updates and Account -->
-    <div class="page-header" id="updatesHeader">Updates</div>
-    <div class="page-header" id="accountHeader">Account</div>
-    
     <!-- Main Content Area -->
     <main id="mainContent">
-        <!-- Home Page -->
-        <div class="page-container active" id="homePage">
-            <div id="contentContainer"></div>
-        </div>
-        
-        <!-- Updates Page -->
-        <div class="page-container" id="updatesPage">
-            <div class="updates-content">
-                <div class="empty-state">
-                    <i class="fas fa-sync-alt"></i>
-                    <h2>No Updates Yet</h2>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Account Page -->
-        <div class="page-container" id="accountPage">
-            <div class="account-content">
-                <div class="section welcome-section" id="welcomeSection">
-                    <div class="welcome-title" id="welcomeTitle">Welcome to cMart</div>
-                    <div class="welcome-subtitle" id="welcomeSubtitle">Please sign in to access your account</div>
-                    <div class="auth-buttons" id="authButtons">
-                        <a href="sign.html?action=signin" class="btn">Sign In</a>
-                        <a href="sign.html?action=signup" class="btn secondary">Create Account</a>
-                    </div>
-                </div>
-
-                <div class="section" id="advertiseSection">
-                    <div class="section-header">
-                        <div class="section-title">Advertise Products & Services</div>
-                    </div>
-                    <div class="list-item" id="advertiseItem">
-                        <div class="list-icon"><i class="fas fa-bullhorn"></i></div>
-                        <div class="list-text">Promote your business on cMart</div>
-                        <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
-                    </div>
-                </div>
-
-                <div class="section" id="supportSection">
-                    <div class="section-header">
-                        <div class="section-title">Support</div>
-                    </div>
-                    <div class="list-item">
-                        <div class="list-icon"><i class="fas fa-question-circle"></i></div>
-                        <div class="list-text">Help Center</div>
-                        <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
-                    </div>
-                    <div class="list-item">
-                        <div class="list-icon"><i class="fas fa-comments"></i></div>
-                        <div class="list-text">Contact Us</div>
-                        <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
-                    </div>
-                    <div class="list-item" id="editProfileBtn">
-                        <div class="list-icon"><i class="fas fa-user-edit"></i></div>
-                        <div class="list-text">Edit Profile</div>
-                        <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
-                    </div>
-                </div>
-
-                <div class="section hidden" id="logoutSection">
-                    <div class="list-item" id="logoutBtn">
-                        <div class="list-icon"><i class="fas fa-sign-out-alt"></i></div>
-                        <div class="list-text">Logout</div>
-                        <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="contentContainer"></div>
     </main>
 
     <!-- Product Details Modal -->
@@ -754,15 +555,11 @@
     
     <!-- Navigation Bar -->
     <div class="nav-bar">
-        <button class="nav-item active" onclick="navigateTo('home')">
+        <button class="nav-item active" onclick="window.location.href='home.html'">
             <i class="fas fa-home nav-icon"></i>
             <span>Home</span>
         </button>
-        <button class="nav-item" onclick="navigateTo('updates')">
-            <i class="fas fa-sync-alt nav-icon"></i>
-            <span>Updates</span>
-        </button>
-        <button class="nav-item" onclick="navigateTo('account')">
+        <button class="nav-item" onclick="window.location.href='account.html'">
             <i class="fas fa-user nav-icon"></i>
             <span>Account</span>
         </button>
@@ -783,34 +580,11 @@
         const closeModal = document.getElementById('closeModal');
         const closeModalTop = document.getElementById('closeModalTop');
         const campusFilter = document.getElementById('campusFilter');
-        const mainHeader = document.getElementById('mainHeader');
-        
-        // Page headers
-        const updatesHeader = document.getElementById('updatesHeader');
-        const accountHeader = document.getElementById('accountHeader');
-        
-        // Page elements
-        const homePage = document.getElementById('homePage');
-        const updatesPage = document.getElementById('updatesPage');
-        const accountPage = document.getElementById('accountPage');
-        const navItems = document.querySelectorAll('.nav-item');
-
-        // Current page state
-        let currentPage = 'home';
 
         // Initialize application
         function initApp() {
             setupEventListeners();
             loadHomeItems();
-            checkLoginStatus();
-            
-            // Handle URL hash
-            const hash = window.location.hash.replace('#', '');
-            if (hash && ['home', 'updates', 'account'].includes(hash)) {
-                navigateTo(hash);
-            } else {
-                navigateTo('home');
-            }
         }
 
         // Setup event listeners
@@ -831,107 +605,6 @@
                     searchResults.style.display = 'none';
                 }
             });
-        }
-
-        // Navigation function
-        function navigateTo(page) {
-            currentPage = page;
-            
-            // Update active nav item
-            navItems.forEach(item => item.classList.remove('active'));
-            
-            // Show correct page and hide others
-            homePage.classList.remove('active');
-            updatesPage.classList.remove('active');
-            accountPage.classList.remove('active');
-            
-            // Show/hide headers
-            mainHeader.style.display = 'block';
-            updatesHeader.classList.remove('active');
-            accountHeader.classList.remove('active');
-            
-            switch(page) {
-                case 'home':
-                    homePage.classList.add('active');
-                    mainHeader.style.display = 'block';
-                    document.querySelectorAll('.nav-item')[0].classList.add('active');
-                    loadHomeItems();
-                    break;
-                case 'updates':
-                    updatesPage.classList.add('active');
-                    mainHeader.style.display = 'none';
-                    updatesHeader.classList.add('active');
-                    document.querySelectorAll('.nav-item')[1].classList.add('active');
-                    break;
-                case 'account':
-                    accountPage.classList.add('active');
-                    mainHeader.style.display = 'none';
-                    accountHeader.classList.add('active');
-                    document.querySelectorAll('.nav-item')[2].classList.add('active');
-                    checkLoginStatus();
-                    break;
-            }
-            
-            // Hide search results
-            searchResults.style.display = 'none';
-            if (searchInput) searchInput.value = '';
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
-        }
-
-        // Check login status for account page
-        function checkLoginStatus() {
-            const user = localStorage.getItem('cmartCurrentUser');
-            const welcomeTitle = document.getElementById('welcomeTitle');
-            const welcomeSubtitle = document.getElementById('welcomeSubtitle');
-            const authButtons = document.getElementById('authButtons');
-            const logoutSection = document.getElementById('logoutSection');
-            const advertiseItem = document.getElementById('advertiseItem');
-            
-            if (user) {
-                try {
-                    const userData = JSON.parse(user);
-                    welcomeTitle.textContent = 'Welcome back, ' + userData.name + '!';
-                    welcomeSubtitle.textContent = 'You are signed in to your account';
-                    authButtons.classList.add('hidden');
-                    logoutSection.classList.remove('hidden');
-                    
-                    advertiseItem.onclick = function() {
-                        window.location.href = 'store.html';
-                    };
-                } catch (e) {
-                    localStorage.removeItem('cmartCurrentUser');
-                    checkLoginStatus();
-                }
-            } else {
-                welcomeTitle.textContent = 'Welcome to cMart';
-                welcomeSubtitle.textContent = 'Please sign in to access your account';
-                authButtons.classList.remove('hidden');
-                logoutSection.classList.add('hidden');
-                
-                advertiseItem.onclick = function() {
-                    alert('Please create an account or sign in to advertise your products and services on cMart.');
-                };
-            }
-            
-            // Setup logout button
-            const logoutBtn = document.getElementById('logoutBtn');
-            if (logoutBtn) {
-                logoutBtn.onclick = function() {
-                    localStorage.removeItem('cmartCurrentUser');
-                    checkLoginStatus();
-                    showMessage('You have been logged out successfully', 'success');
-                };
-            }
-            
-            // Setup edit profile button
-            const editProfileBtn = document.getElementById('editProfileBtn');
-            if (editProfileBtn) {
-                editProfileBtn.onclick = function() {
-                    alert('Edit profile functionality would be implemented here.');
-                };
-            }
         }
 
         // Check if current user is admin
@@ -1002,8 +675,6 @@
 
         // Load and display items for home page
         function loadHomeItems() {
-            if (!homePage.classList.contains('active')) return;
-            
             contentContainer.innerHTML = `
                 <div class="loading">
                     <div class="loading-spinner"></div>
@@ -1402,12 +1073,6 @@
                 }
             }, 3000);
         }
-
-        // Handle URL hash changes
-        window.addEventListener('hashchange', function() {
-            const page = window.location.hash.replace('#', '') || 'home';
-            navigateTo(page);
-        });
 
         // Initial load
         document.addEventListener('DOMContentLoaded', initApp);

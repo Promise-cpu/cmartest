@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>cMart</title>
+    <title>Brandly</title>
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#4682b4">
     <link rel="apple-touch-icon" href="logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -23,119 +25,255 @@
             height: 100%;
             overflow: hidden;
             touch-action: manipulation;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
         
         body {
-            background-color: #f5f5dc; /* Milk color */
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             position: fixed;
             width: 100%;
             height: 100%;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            transition: opacity 0.3s ease;
         }
         
-        /* iOS notch/padding adjustments */
+        /* Safe Area Insets for Modern Devices */
         @supports (padding-top: env(safe-area-inset-top)) {
             body {
-                padding-top: env(safe-area-inset-top);
-                padding-bottom: env(safe-area-inset-bottom);
-                padding-left: env(safe-area-inset-left);
-                padding-right: env(safe-area-inset-right);
+                padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
             }
         }
         
-        .splash-container {
+        /* Main Container */
+        .container {
             width: 100%;
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            animation: fadeIn 0.3s ease-out;
-            position: relative;
+            justify-content: center;
+            padding: 20px;
         }
         
-        .logo-container {
-            position: relative;
-            margin-bottom: 2rem;
-        }
-        
-        .logo {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
-            animation: logoPulse 2s infinite ease-in-out;
-        }
-        
-        .app-name {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: lightslategrey;
-            letter-spacing: 0.5px;
-            opacity: 0;
-            animation: fadeInUp 0.5s ease-out 0.2s forwards;
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-        
-        .loading-container {
-            position: absolute;
-            bottom: 4rem;
-            left: 0;
-            right: 0;
+        /* Splash Screen */
+        .splash-screen {
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Brand Logo */
+        .brand-logo {
+            width: 140px;
+            height: 140px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .logo-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #4682b4 0%, #5a9bd5 100%);
+            box-shadow: 
+                0 10px 30px rgba(70, 130, 180, 0.25),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3);
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+        
+        .logo-fallback {
+            width: 100%;
+            height: 100%;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #4682b4 0%, #5a9bd5 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            font-weight: 700;
+            box-shadow: 
+                0 10px 30px rgba(70, 130, 180, 0.25),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3);
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+        
+        /* App Name */
+        .app-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #4682b4 0%, #5a9bd5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            animation: slideUp 0.6s ease-out 0.3s forwards;
+        }
+        
+        /* Loading Section */
+        .loading-section {
+            width: 100%;
+            max-width: 280px;
+            position: absolute;
+            bottom: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
         }
         
         .loading-text {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 1rem;
-            opacity: 0;
-            animation: fadeIn 0.5s ease-out 0.4s forwards;
-        }
-        
-        .progress-bar {
-            width: 80%;
-            max-width: 200px;
-            height: 3px;
-            background-color: rgba(70, 130, 180, 0.2);
-            border-radius: 3px;
-            overflow: hidden;
-            position: relative;
+            font-size: 0.95rem;
+            color: #64748b;
+            font-weight: 500;
             opacity: 0;
             animation: fadeIn 0.5s ease-out 0.5s forwards;
         }
         
-        .progress-fill {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 0%;
-            background-color: steelblue;
-            border-radius: 3px;
-            animation: progressAnimation 2s ease-in-out forwards; /* CHANGED TO 2s */
-        }
-        
-        .footer-text {
-            position: absolute;
-            bottom: 1.5rem;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-size: 0.75rem;
-            color: #888;
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(70, 130, 180, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
             opacity: 0;
             animation: fadeIn 0.5s ease-out 0.6s forwards;
         }
         
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #4682b4 0%, #5a9bd5 50%, #6ab0f5 100%);
+            border-radius: 2px;
+            animation: progressAnimation 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        /* Copyright */
+        .copyright {
+            position: absolute;
+            bottom: 30px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 0.7s forwards;
+        }
+        
+        /* Offline Screen */
+        .offline-screen {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .offline-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(70, 130, 180, 0.1) 0%, rgba(70, 130, 180, 0.05) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+        
+        .offline-icon i {
+            font-size: 4rem;
+            color: #4682b4;
+        }
+        
+        .offline-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+        
+        .offline-message {
+            font-size: 1rem;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 35px;
+            max-width: 350px;
+        }
+        
+        /* Action Button */
+        .action-button {
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #4682b4 0%, #5a9bd5 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 15px rgba(70, 130, 180, 0.3),
+                0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 20px rgba(70, 130, 180, 0.4),
+                0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .action-button:active {
+            transform: translateY(0);
+            box-shadow: 
+                0 2px 10px rgba(70, 130, 180, 0.3),
+                0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .action-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Connection Status Badge */
+        .connection-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            background: rgba(70, 130, 180, 0.1);
+            color: #4682b4;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        /* Animations */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -145,7 +283,7 @@
             }
         }
         
-        @keyframes fadeInUp {
+        @keyframes slideUp {
             from {
                 opacity: 0;
                 transform: translateY(20px);
@@ -156,12 +294,23 @@
             }
         }
         
-        @keyframes logoPulse {
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes logoFloat {
             0%, 100% {
-                transform: scale(1);
+                transform: translateY(0) scale(1);
             }
             50% {
-                transform: scale(1.05);
+                transform: translateY(-10px) scale(1.02);
             }
         }
         
@@ -169,177 +318,437 @@
             0% {
                 width: 0%;
             }
-            50% {
-                width: 70%;
+            70% {
+                width: 85%;
             }
             100% {
                 width: 100%;
             }
         }
         
-        /* Fallback if logo.png not found */
-        .logo-fallback {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, steelblue, #5a9bd5);
-            border-radius: 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 2.5rem;
-            font-weight: bold;
-            box-shadow: 0 8px 25px rgba(70, 130, 180, 0.3);
-            animation: logoPulse 2s infinite ease-in-out;
+        @keyframes iconPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(70, 130, 180, 0.1);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 15px rgba(70, 130, 180, 0);
+            }
         }
         
-        /* Dark mode support */
+        /* Dark Mode */
         @media (prefers-color-scheme: dark) {
             body {
-                background-color: #1a1a1a;
+                background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             }
             
             .app-name {
-                color: #fff;
+                color: #f1f5f9;
+                background: linear-gradient(135deg, #5a9bd5 0%, #6ab0f5 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
             }
             
             .loading-text {
-                color: #aaa;
+                color: #cbd5e1;
             }
             
-            .footer-text {
-                color: #666;
+            .copyright {
+                color: #94a3b8;
             }
             
+            .offline-title {
+                color: #f1f5f9;
+            }
+            
+            .offline-message {
+                color: #cbd5e1;
+            }
+            
+            .offline-icon {
+                background: linear-gradient(135deg, rgba(70, 130, 180, 0.15) 0%, rgba(70, 130, 180, 0.05) 100%);
+            }
+            
+            .logo-image,
             .logo-fallback {
-                background: linear-gradient(135deg, #2c5282, #4299e1);
+                box-shadow: 
+                    0 10px 30px rgba(0, 0, 0, 0.3),
+                    inset 0 1px 1px rgba(255, 255, 255, 0.1);
             }
         }
         
-        /* Tablet adjustments */
+        /* Tablet and Desktop */
         @media (min-width: 768px) {
-            .logo {
-                width: 150px;
-                height: 150px;
+            .brand-logo {
+                width: 160px;
+                height: 160px;
             }
             
             .logo-fallback {
-                width: 150px;
-                height: 150px;
-                font-size: 3rem;
+                font-size: 3.5rem;
             }
             
             .app-name {
                 font-size: 3rem;
             }
-        }
-        
-        /* Landscape mode */
-        @media (orientation: landscape) and (max-height: 600px) {
-            .splash-container {
-                flex-direction: row;
-                gap: 3rem;
+            
+            .offline-icon {
+                width: 140px;
+                height: 140px;
             }
             
-            .logo-container {
+            .offline-icon i {
+                font-size: 4.5rem;
+            }
+            
+            .offline-title {
+                font-size: 2.2rem;
+            }
+            
+            .offline-message {
+                font-size: 1.1rem;
+                max-width: 450px;
+            }
+            
+            .action-button {
+                padding: 16px 40px;
+                font-size: 1.1rem;
+            }
+        }
+        
+        /* Landscape Mode */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .splash-screen,
+            .offline-screen {
+                flex-direction: row;
+                gap: 40px;
+            }
+            
+            .brand-logo {
                 margin-bottom: 0;
             }
             
-            .loading-container {
+            .loading-section {
                 position: relative;
                 bottom: auto;
-                align-items: flex-start;
+                width: 300px;
             }
             
-            .footer-text {
-                display: none;
+            .copyright {
+                position: absolute;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .offline-screen {
+                gap: 50px;
+            }
+            
+            .offline-content {
+                text-align: left;
+                max-width: 400px;
+            }
+        }
+        
+        /* Small Phones */
+        @media (max-width: 360px) {
+            .brand-logo {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .app-name {
+                font-size: 2rem;
+                margin-bottom: 30px;
+            }
+            
+            .loading-section {
+                bottom: 60px;
+            }
+            
+            .copyright {
+                bottom: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="splash-container">
-        <div class="logo-container">
-            <!-- Logo image with fallback -->
-            <img src="logo.png" alt="cMart Logo" class="logo" 
-                 onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';">
-            <div id="logo-fallback" class="logo-fallback" style="display: none;">
-                cM
+    <!-- Connection Status Indicator -->
+    <div class="connection-status" id="connectionStatus">
+        <i class="fas fa-wifi"></i>
+        <span>Online</span>
+    </div>
+    
+    <!-- Main Content Container -->
+    <div class="container">
+        <!-- Splash Screen -->
+        <div class="splash-screen" id="splashScreen">
+            <div class="brand-logo">
+                <img src="logo.png" alt="Brandly" class="logo-image" 
+                     onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+                <div class="logo-fallback" id="logoFallback" style="display: none;">
+                    B
+                </div>
             </div>
+            
+            <h1 class="app-name">Brandly</h1>
+            
+            <div class="loading-section">
+                <div class="loading-text">Preparing your shopping experience...</div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+            </div>
+            
+            <div class="copyright">© 2024 Brandly Marketplace</div>
         </div>
         
-        <h1 class="app-name">Campus Mart</h1>
-        
-        <div class="loading-container">
-            <div class="loading-text">Loading your marketplace...</div>
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
+        <!-- Offline Screen -->
+        <div class="offline-screen" id="offlineScreen">
+            <div class="offline-icon">
+                <i class="fas fa-wifi-slash"></i>
+            </div>
+            
+            <div class="offline-content">
+                <h2 class="offline-title">No Internet Connection</h2>
+                <p class="offline-message">
+                    You're currently offline. Brandly requires an internet connection to showcase our products and services. Please check your connection and try again.
+                </p>
+                
+                <button class="action-button" id="retryButton">
+                    <i class="fas fa-sync-alt"></i>
+                    Try Again
+                </button>
             </div>
         </div>
-        
-        
+    </div>
 
     <script>
-        // Prevent zooming and bouncing on mobile
-        document.addEventListener('touchmove', function(e) {
-            if(e.scale !== 1) e.preventDefault();
-        }, { passive: false });
+        // DOM Elements
+        const splashScreen = document.getElementById('splashScreen');
+        const offlineScreen = document.getElementById('offlineScreen');
+        const retryButton = document.getElementById('retryButton');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const progressBar = document.getElementById('progressBar');
         
-        // Disable context menu on long press
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        });
+        // State Management
+        let isOnline = navigator.onLine;
+        let redirectTimer = null;
         
-        // Detect if app is installed as PWA
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
-                            window.navigator.standalone === true;
-        
-        if (isStandalone) {
-            document.body.classList.add('standalone-mode');
-            console.log('Running as standalone app');
-        }
-        
-        // Redirect to home.html after 2 seconds
-        setTimeout(function() {
-            // Add fade out animation before redirect
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.3s ease-out';
+        // Initialize Application
+        function initApp() {
+            updateConnectionStatus();
+            setupEventListeners();
             
-            setTimeout(function() {
-                window.location.href = "home.html";
-            }, 300); // Wait for fade out to complete
-        }, 2000); // CHANGED TO 2000 MILLISECONDS (2 SECONDS)
-        
-        // Optional: Preload home.html for immediate transition
-        if ('serviceWorker' in navigator) {
-            // Register service worker for better PWA experience
-            navigator.serviceWorker.register('sw.js').catch(console.error);
+            // Check initial connection
+            if (isOnline) {
+                startAppFlow();
+            } else {
+                showOfflineScreen();
+            }
         }
         
-        // Preload critical resources
-        window.addEventListener('load', function() {
-            // Preload home.html
+        // Update Connection Status Display
+        function updateConnectionStatus() {
+            isOnline = navigator.onLine;
+            
+            if (isOnline) {
+                connectionStatus.innerHTML = '<i class="fas fa-wifi"></i><span>Online</span>';
+                connectionStatus.style.display = 'flex';
+                connectionStatus.style.background = 'rgba(70, 130, 180, 0.1)';
+                connectionStatus.style.color = '#4682b4';
+                
+                // Hide status after 3 seconds
+                setTimeout(() => {
+                    connectionStatus.style.display = 'none';
+                }, 3000);
+            } else {
+                connectionStatus.innerHTML = '<i class="fas fa-wifi-slash"></i><span>Offline</span>';
+                connectionStatus.style.display = 'flex';
+                connectionStatus.style.background = 'rgba(239, 68, 68, 0.1)';
+                connectionStatus.style.color = '#ef4444';
+            }
+        }
+        
+        // Start Normal App Flow
+        function startAppFlow() {
+            console.log('Brandly: Starting app flow...');
+            
+            // Redirect to home page after 2 seconds
+            redirectTimer = setTimeout(() => {
+                fadeOutToPage('home.html');
+            }, 2000);
+            
+            // Preload resources for better performance
+            preloadResources();
+        }
+        
+        // Show Offline Screen
+        function showOfflineScreen() {
+            console.log('Brandly: Showing offline screen');
+            
+            // Clear any pending redirect
+            if (redirectTimer) {
+                clearTimeout(redirectTimer);
+                redirectTimer = null;
+            }
+            
+            splashScreen.style.display = 'none';
+            offlineScreen.style.display = 'flex';
+            updateConnectionStatus();
+        }
+        
+        // Show Splash Screen
+        function showSplashScreen() {
+            console.log('Brandly: Showing splash screen');
+            
+            splashScreen.style.display = 'flex';
+            offlineScreen.style.display = 'none';
+        }
+        
+        // Fade Out Transition to Another Page
+        function fadeOutToPage(url) {
+            document.body.style.opacity = '0';
+            
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+        
+        // Preload Critical Resources
+        function preloadResources() {
+            if (!isOnline) return;
+            
+            // Preload home page
             const link = document.createElement('link');
             link.rel = 'prefetch';
             link.href = 'home.html';
             link.as = 'document';
             document.head.appendChild(link);
             
-            // Preload Font Awesome
+            // Preload Font Awesome (already loaded, but ensure caching)
             const faLink = document.createElement('link');
             faLink.rel = 'prefetch';
             faLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
             faLink.as = 'style';
             document.head.appendChild(faLink);
-        });
+        }
         
-        // Handle back button to prevent returning to splash
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.href = "home.html";
+        // Check Connection and Retry
+        function checkConnectionAndRetry() {
+            updateConnectionStatus();
+            
+            if (isOnline) {
+                // Update offline screen to show success
+                const title = offlineScreen.querySelector('.offline-title');
+                const message = offlineScreen.querySelector('.offline-message');
+                const icon = offlineScreen.querySelector('.offline-icon i');
+                
+                if (title && message && icon) {
+                    title.textContent = 'Connection Restored!';
+                    message.textContent = 'Welcome back! Taking you to Brandly...';
+                    icon.className = 'fas fa-wifi';
+                    
+                    // Disable retry button
+                    retryButton.disabled = true;
+                    retryButton.innerHTML = '<i class="fas fa-check"></i> Connected';
+                    
+                    // Redirect after 1.5 seconds
+                    setTimeout(() => {
+                        fadeOutToPage('home.html');
+                    }, 1500);
+                }
+            } else {
+                // Show error state on button
+                retryButton.disabled = true;
+                retryButton.innerHTML = '<i class="fas fa-times"></i> Still Offline';
+                
+                // Re-enable button after 2 seconds
+                setTimeout(() => {
+                    retryButton.disabled = false;
+                    retryButton.innerHTML = '<i class="fas fa-sync-alt"></i> Try Again';
+                }, 2000);
             }
-        });
+        }
+        
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Online/Offline Events
+            window.addEventListener('online', () => {
+                console.log('Brandly: Connection restored');
+                updateConnectionStatus();
+                
+                if (offlineScreen.style.display === 'flex') {
+                    checkConnectionAndRetry();
+                } else {
+                    startAppFlow();
+                }
+            });
+            
+            window.addEventListener('offline', () => {
+                console.log('Brandly: Connection lost');
+                updateConnectionStatus();
+                
+                if (splashScreen.style.display === 'flex') {
+                    showOfflineScreen();
+                }
+            });
+            
+            // Retry Button
+            retryButton.addEventListener('click', () => {
+                console.log('Brandly: Manual connection check');
+                
+                retryButton.disabled = true;
+                retryButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+                
+                setTimeout(() => {
+                    checkConnectionAndRetry();
+                }, 1000);
+            });
+            
+            // Prevent Back Button Navigation
+            window.addEventListener('pageshow', (event) => {
+                if (event.persisted) {
+                    window.location.href = "home.html";
+                }
+            });
+            
+            // Prevent Zooming on Mobile
+            document.addEventListener('touchmove', (e) => {
+                if (e.scale !== 1) e.preventDefault();
+            }, { passive: false });
+            
+            // Prevent Context Menu
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                return false;
+            });
+        }
+        
+        // PWA Detection
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                           window.navigator.standalone === true;
+        
+        if (isStandalone) {
+            console.log('Brandly: Running as standalone app');
+            document.body.classList.add('standalone-mode');
+        }
+        
+        // Service Worker Registration
+        if ('serviceWorker' in navigator && isOnline) {
+            navigator.serviceWorker.register('sw.js')
+                .then(registration => {
+                    console.log('Brandly: Service Worker registered:', registration);
+                })
+                .catch(error => {
+                    console.log('Brandly: Service Worker registration failed:', error);
+                });
+        }
+        
+        // Initialize App
+        window.addEventListener('load', initApp);
     </script>
 </body>
 </html>
