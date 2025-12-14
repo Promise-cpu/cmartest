@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>cMart - Account</title>
+    <title>Brandly - Account</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -179,7 +179,7 @@
     <main>
         <div class="account-content">
             <div class="section welcome-section" id="welcomeSection">
-                <div class="welcome-title" id="welcomeTitle">Welcome to cMart</div>
+                <div class="welcome-title" id="welcomeTitle">Welcome to Brandly</div>
                 <div class="welcome-subtitle" id="welcomeSubtitle">Please sign in to access your account</div>
                 <div class="auth-buttons" id="authButtons">
                     <a href="sign.html?action=signin" class="btn">Sign In</a>
@@ -193,7 +193,7 @@
                 </div>
                 <div class="list-item" id="advertiseItem">
                     <div class="list-icon"><i class="fas fa-bullhorn"></i></div>
-                    <div class="list-text">Promote your business on cMart</div>
+                    <div class="list-text">Promote your business on Brandly</div>
                     <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
                 </div>
             </div>
@@ -272,13 +272,13 @@
                     checkLoginStatus();
                 }
             } else {
-                welcomeTitle.textContent = 'Welcome to cMart';
+                welcomeTitle.textContent = 'Welcome to Brandly';
                 welcomeSubtitle.textContent = 'Please sign in to access your account';
                 authButtons.classList.remove('hidden');
                 logoutSection.classList.add('hidden');
                 
                 advertiseItem.onclick = function() {
-                    alert('Please create an account or sign in to advertise your products and services on cMart.');
+                    alert('Please create an account or sign in to advertise your products and services on Brandly.');
                 };
             }
             
@@ -292,11 +292,11 @@
                 };
             }
             
-            // Setup edit profile button
+            // Setup edit profile button to go to profile.html
             const editProfileBtn = document.getElementById('editProfileBtn');
             if (editProfileBtn) {
                 editProfileBtn.onclick = function() {
-                    alert('Edit profile functionality would be implemented here.');
+                    window.location.href = 'profile.html';
                 };
             }
         }

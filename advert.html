@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advertise - cMart</title>
+    <title>Advertise - Brandly</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -22,7 +22,7 @@
         }
         
         header {
-            background-color: steelblue;
+            background-color: #2196F3;
             color: white;
             padding: 15px;
             position: sticky;
@@ -60,6 +60,7 @@
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         
         .form-title {
@@ -67,6 +68,7 @@
             font-weight: bold;
             margin-bottom: 20px;
             text-align: center;
+            color: #2196F3;
         }
         
         .form-group { 
@@ -78,11 +80,12 @@
             font-size: 14px; 
             margin-bottom: 8px; 
             font-weight: 500;
+            color: #333;
         }
         
         .required::after {
             content: " *";
-            color: #c0392b;
+            color: #F44336;
         }
         
         .hint {
@@ -103,7 +106,7 @@
         }
         
         input[type="text"]:focus, input[type="url"]:focus, textarea:focus, select:focus {
-            border-color: steelblue;
+            border-color: #2196F3;
             outline: none;
             background: white;
         }
@@ -128,13 +131,13 @@
         }
         
         .image-upload:hover {
-            border-color: steelblue;
+            border-color: #2196F3;
             background: #f0f8ff;
         }
         
         .image-upload i {
             font-size: 40px;
-            color: steelblue;
+            color: #2196F3;
             margin-bottom: 10px;
         }
         
@@ -151,7 +154,7 @@
             display: block; 
             width: 100%; 
             padding: 15px; 
-            background: steelblue; 
+            background: #2196F3; 
             color: #fff; 
             border-radius: 8px; 
             border: none; 
@@ -163,7 +166,7 @@
         }
         
         .btn:hover:not(:disabled) {
-            background: #2a6a9e;
+            background: #0d8bf2;
         }
         
         .btn:disabled {
@@ -172,39 +175,42 @@
         }
         
         .error { 
-            color: #c0392b; 
+            color: #F44336; 
             font-size: 14px; 
             margin-top: 8px; 
             padding: 8px 12px;
-            background: #ffeaea;
+            background: #ffebee;
             border-radius: 6px;
-            border-left: 3px solid #c0392b;
+            border-left: 3px solid #F44336;
             display: none;
         }
         
         .success { 
-            color: #1e8f3e; 
+            color: #4CAF50; 
             font-size: 14px; 
             margin-top: 8px; 
             padding: 8px 12px;
-            background: #eaffea;
+            background: #e8f5e9;
             border-radius: 6px;
-            border-left: 3px solid #1e8f3e;
+            border-left: 3px solid #4CAF50;
             display: none;
         }
         
         .info-box {
-            background: #eaf7ff;
-            border-left: 4px solid #3498db;
+            background: #e8f4fd;
+            border-left: 4px solid #2196F3;
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 8px;
         }
         
         .info-box h3 {
-            color: #3498db;
+            color: #2196F3;
             margin-bottom: 8px;
             font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .info-box p {
@@ -219,7 +225,7 @@
         
         .category-tag {
             display: inline-block;
-            background: steelblue;
+            background: #2196F3;
             color: white;
             padding: 6px 12px;
             border-radius: 20px;
@@ -251,7 +257,7 @@
             width: 20px;
             height: 20px;
             border: 3px solid #f3f3f3;
-            border-top: 3px solid steelblue;
+            border-top: 3px solid #2196F3;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-right: 8px;
@@ -271,7 +277,7 @@
                 <i class="fas fa-arrow-left"></i>
                 Back
             </a>
-            <div class="logo">cMart</div>
+            <div class="logo">Brandly</div>
             <div style="width: 60px;"></div>
         </div>
     </header>
@@ -315,8 +321,8 @@
                 <!-- Categories Section -->
                 <div class="form-group">
                     <label class="required">Service Categories</label>
-                    <input type="text" id="categoryInput" placeholder="Add a category (e.g., 'Web Design', 'Tutoring')">
-                    <div class="hint">Press Enter or comma to add categories. These are what customers will search for.</div>
+                    <input type="text" id="categoryInput" placeholder="Type a category and press Enter">
+                    <div class="hint">Press Enter to add categories. These are what customers will search for.</div>
                     <div id="categoryTags"></div>
                 </div>
                 
@@ -329,12 +335,13 @@
                 
                 <!-- Location -->
                 <div class="form-group">
-                    <label class="required">Campus Location</label>
-                    <select id="location" required>
-                        <option value="">Select your campus</option>
+                    <label>Campus Location</label>
+                    <select id="location">
+                        <option value="">Select your campus (Optional)</option>
                         <option value="Uli Campus">Uli Campus</option>
                         <option value="Igbariam Campus">Igbariam Campus</option>
                         <option value="Awka Campus">Awka Campus</option>
+                        <option value="Online">Online Services</option>
                     </select>
                 </div>
                 
@@ -388,7 +395,7 @@
         let categories = [];
 
         // IndexedDB Database
-        const DB_NAME = 'cMartDB';
+        const DB_NAME = 'brandlyDB';
         const DB_VERSION = 1;
         const BRANDS_STORE = 'brands';
 
@@ -414,6 +421,7 @@
                         brandsStore.createIndex('vendorEmail', 'vendorEmail', { unique: false });
                         brandsStore.createIndex('timestamp', 'timestamp', { unique: false });
                         brandsStore.createIndex('categories', 'categories', { multiEntry: true });
+                        brandsStore.createIndex('location', 'location', { unique: false });
                     }
                 };
             });
@@ -441,7 +449,7 @@
         
         if (editId) {
             // Load existing brand data
-            editItem = JSON.parse(localStorage.getItem('cmartEditItem'));
+            editItem = JSON.parse(localStorage.getItem('brandlyEditItem'));
             if (editItem) {
                 document.getElementById('brandName').value = editItem.brandName || '';
                 document.getElementById('contactLink').value = editItem.contactLink || '';
@@ -457,7 +465,7 @@
                 if (editItem.image) {
                     imagePreview.src = editItem.image;
                     imagePreview.style.display = 'block';
-                    imageUpload.innerHTML = '<i class="fas fa-check-circle" style="color: #1e8f3e;"></i>';
+                    imageUpload.innerHTML = '<i class="fas fa-check-circle" style="color: #4CAF50;"></i>';
                 }
                 
                 // Change form title and button text
@@ -483,29 +491,28 @@
                 reader.onload = function(e) {
                     imagePreview.src = e.target.result;
                     imagePreview.style.display = 'block';
-                    imageUpload.innerHTML = '<i class="fas fa-check-circle" style="color: #1e8f3e;"></i>';
+                    imageUpload.innerHTML = '<i class="fas fa-check-circle" style="color: #4CAF50;"></i>';
                     formError.style.display = 'none';
                 };
                 reader.readAsDataURL(file);
             }
         });
 
-        // Category management
+        // Category management - Enter key only
         categoryInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ',') {
+            if (e.key === 'Enter') {
                 e.preventDefault();
                 addCategory();
             }
         });
 
-        categoryInput.addEventListener('blur', addCategory);
-
         function addCategory() {
             const category = categoryInput.value.trim();
-            if (category && !categories.includes(category)) {
+            if (category && category.length > 0 && !categories.includes(category)) {
                 categories.push(category);
                 renderCategories();
                 categoryInput.value = '';
+                formError.style.display = 'none';
             }
         }
 
@@ -547,13 +554,21 @@
             const imageFile = brandImage.files[0];
 
             // Validation
-            if (!brandName || !contactLink || !descriptionText || !location) {
-                showError('Please fill all required fields');
+            if (!brandName || !contactLink || !descriptionText) {
+                showError('Please fill all required fields (marked with *)');
                 return;
             }
 
             if (categories.length === 0) {
                 showError('Please add at least one service category');
+                return;
+            }
+
+            // Validate URL format
+            try {
+                new URL(contactLink);
+            } catch (error) {
+                showError('Please enter a valid URL for contact link');
                 return;
             }
 
@@ -573,10 +588,12 @@
                 contactLink: contactLink,
                 description: descriptionText,
                 categories: categories,
-                location: location,
-                timestamp: editId ? new Date().toISOString() : new Date().toISOString(),
+                location: location || 'Not specified',
+                timestamp: new Date().toISOString(),
                 image: imagePreview.src || (editId ? editItem.image : ''),
-                type: 'brand'
+                type: 'brand',
+                status: 'active',
+                views: editId ? (editItem.views || 0) : 0
             };
 
             try {
@@ -592,17 +609,18 @@
                     // Update localStorage
                     updateLocalStorage(brand, editId);
                     
-                    showSuccess('Brand updated successfully!');
+                    showSuccess('Brand updated successfully! Redirecting...');
                 } else {
                     // Save to IndexedDB
                     await saveBrandToDB(brand);
                     
-                    // Also save to localStorage for backward compatibility
+                    // Also save to localStorage for both home and store pages
                     saveToLocalStorage(brand);
                     
-                    showSuccess('Brand advertised successfully!');
+                    showSuccess('Brand advertised successfully! Redirecting...');
                 }
                 
+                // Redirect after success
                 setTimeout(() => window.location.href = 'store.html', 1500);
                 
             } catch (error) {
@@ -628,21 +646,53 @@
             formError.style.display = 'none';
         }
 
-        // Backward compatibility with localStorage
+        // Save to localStorage for both home and store pages
         function saveToLocalStorage(brand) {
             try {
-                // Save to main services list
-                const services = JSON.parse(localStorage.getItem('cmartServices') || '[]');
-                services.unshift(brand);
-                localStorage.setItem('cmartServices', JSON.stringify(services));
+                const user = JSON.parse(currentUser);
                 
-                // Save to user's services list
+                // 1. Save to main services list (for store.html)
+                let services = JSON.parse(localStorage.getItem('brandlyServices') || '[]');
+                
+                // Remove any existing brand with same ID to avoid duplicates
+                services = services.filter(s => s.id !== brand.id);
+                
+                // Add new brand at the beginning
+                services.unshift(brand);
+                
+                // Keep only latest 100 items
+                if (services.length > 100) {
+                    services = services.slice(0, 100);
+                }
+                
+                localStorage.setItem('brandlyServices', JSON.stringify(services));
+                
+                // 2. Save to home page items (for index.html)
+                let homeItems = JSON.parse(localStorage.getItem('brandlyHomeItems') || '[]');
+                
+                // Remove any existing brand with same ID
+                homeItems = homeItems.filter(item => item.id !== brand.id);
+                
+                // Add to home items
+                homeItems.unshift(brand);
+                
+                // Keep only latest 50 items for home page
+                if (homeItems.length > 50) {
+                    homeItems = homeItems.slice(0, 50);
+                }
+                
+                localStorage.setItem('brandlyHomeItems', JSON.stringify(homeItems));
+                
+                // 3. Save to user's brands list
                 const userEmail = user.email.replace(/[^a-zA-Z0-9]/g, '_');
-                const userServices = JSON.parse(localStorage.getItem('cmartServices_' + userEmail) || '[]');
-                userServices.unshift(brand);
-                localStorage.setItem('cmartServices_' + userEmail, JSON.stringify(userServices));
+                let userBrands = JSON.parse(localStorage.getItem('brandlyUserBrands_' + userEmail) || '[]');
+                
+                userBrands = userBrands.filter(b => b.id !== brand.id);
+                userBrands.unshift(brand);
+                localStorage.setItem('brandlyUserBrands_' + userEmail, JSON.stringify(userBrands));
+                
             } catch (error) {
-                console.warn('LocalStorage backup failed:', error);
+                console.warn('LocalStorage save failed:', error);
             }
         }
 
@@ -650,26 +700,35 @@
         function updateLocalStorage(brand, editId) {
             try {
                 const user = JSON.parse(currentUser);
-                const userEmail = user.email.replace(/[^a-zA-Z0-9]/g, '_');
                 
                 // Update main services list
-                const services = JSON.parse(localStorage.getItem('cmartServices') || '[]');
+                let services = JSON.parse(localStorage.getItem('brandlyServices') || '[]');
                 const serviceIndex = services.findIndex(s => s.id === editId);
                 if (serviceIndex !== -1) {
                     services[serviceIndex] = brand;
-                    localStorage.setItem('cmartServices', JSON.stringify(services));
+                    localStorage.setItem('brandlyServices', JSON.stringify(services));
                 }
                 
-                // Update user's services
-                const userServices = JSON.parse(localStorage.getItem('cmartServices_' + userEmail) || '[]');
-                const userServiceIndex = userServices.findIndex(s => s.id === editId);
-                if (userServiceIndex !== -1) {
-                    userServices[userServiceIndex] = brand;
-                    localStorage.setItem('cmartServices_' + userEmail, JSON.stringify(userServices));
+                // Update home page items
+                let homeItems = JSON.parse(localStorage.getItem('brandlyHomeItems') || '[]');
+                const homeIndex = homeItems.findIndex(item => item.id === editId);
+                if (homeIndex !== -1) {
+                    homeItems[homeIndex] = brand;
+                    localStorage.setItem('brandlyHomeItems', JSON.stringify(homeItems));
+                }
+                
+                // Update user's brands
+                const userEmail = user.email.replace(/[^a-zA-Z0-9]/g, '_');
+                let userBrands = JSON.parse(localStorage.getItem('brandlyUserBrands_' + userEmail) || '[]');
+                const userIndex = userBrands.findIndex(b => b.id === editId);
+                if (userIndex !== -1) {
+                    userBrands[userIndex] = brand;
+                    localStorage.setItem('brandlyUserBrands_' + userEmail, JSON.stringify(userBrands));
                 }
                 
                 // Clear edit item
-                localStorage.removeItem('cmartEditItem');
+                localStorage.removeItem('brandlyEditItem');
+                
             } catch (error) {
                 console.warn('LocalStorage update failed:', error);
             }

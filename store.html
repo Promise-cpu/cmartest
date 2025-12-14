@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Brand - cMart</title>
+    <title>My Brand - Brandly</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -53,12 +53,6 @@
         main {
             padding: 20px;
             padding-bottom: 80px;
-        }
-        
-        .page-title {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 20px;
         }
         
         .empty-state {
@@ -289,26 +283,6 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             display: none;
         }
-
-        .info-box {
-            background: #eaf7ff;
-            border-left: 4px solid #3498db;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
-        
-        .info-box h3 {
-            color: #3498db;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-        
-        .info-box p {
-            color: #555;
-            font-size: 14px;
-            line-height: 1.5;
-        }
     </style>
 </head>
 <body>
@@ -318,19 +292,12 @@
                 <i class="fas fa-arrow-left"></i>
                 Back
             </a>
-            <div class="logo">cMart</div>
+            <div class="logo">Brandly</div>
             <div style="width: 60px;"></div>
         </div>
     </header>
 
     <main>
-        <h1 class="page-title">My Brand</h1>
-        
-        <div class="info-box">
-            <h3><i class="fas fa-lightbulb"></i> Manage Your Brand</h3>
-            <p>Advertise your brand and services to reach more customers. Add specific categories that customers might search for.</p>
-        </div>
-        
         <div class="upload-section">
             <div class="upload-card" onclick="window.location.href='advert.html'">
                 <div class="upload-icon">
@@ -346,15 +313,15 @@
 
     <div id="message" class="message"></div>
 
-    <!-- Navigation Bar - Updated to 2 items only -->
+    <!-- Navigation Bar - Only Home and Account -->
     <div class="nav-bar">
         <button class="nav-item" onclick="window.location.href='home.html'">
             <i class="fas fa-home nav-icon"></i>
             <span>Home</span>
         </button>
-        <button class="nav-item active">
-            <i class="fas fa-store nav-icon"></i>
-            <span>My Brand</span>
+        <button class="nav-item active" onclick="window.location.href='account.html'">
+            <i class="fas fa-user nav-icon"></i>
+            <span>Account</span>
         </button>
     </div>
 
