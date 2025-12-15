@@ -22,7 +22,7 @@
         }
         
         header {
-            background: #2196F3;
+            background: steelblue;
             color: white;
             padding: 16px;
             position: sticky;
@@ -70,6 +70,7 @@
         
         .form-group {
             margin-bottom: 20px;
+            position: relative;
         }
         
         label {
@@ -96,7 +97,7 @@
         input:focus,
         select:focus {
             outline: none;
-            border-color: #2196F3;
+            border-color: steelblue;
             background: white;
         }
         
@@ -123,7 +124,7 @@
         .btn {
             width: 100%;
             padding: 16px;
-            background: #2196F3;
+            background: steelblue;
             color: white;
             border: none;
             border-radius: 8px;
@@ -134,7 +135,17 @@
         }
         
         .btn:hover {
-            background: #0d8bf2;
+            background: #4b7ea4;
+        }
+        
+        .logout-btn {
+            background: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .logout-btn:hover {
+            background: #e8e8e8;
         }
         
         .error {
@@ -157,14 +168,13 @@
             display: none;
         }
         
-        .logout-btn {
-            background: #f5f5f5;
-            color: #333;
-            border: 1px solid #ddd;
-        }
-        
-        .logout-btn:hover {
-            background: #e8e8e8;
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 38px;
+            color: #666;
+            cursor: pointer;
+            font-size: 18px;
         }
         
         @media (max-width: 480px) {
@@ -175,21 +185,13 @@
             .profile-card {
                 padding: 16px;
             }
-            
-            .phone-group {
-                flex-direction: column;
-            }
-            
-            .country-code {
-                width: 100%;
-            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="header-content">
-            <button class="back-btn" onclick="window.history.back()">
+            <button class="back-btn" onclick="goBack()">
                 <i class="fas fa-arrow-left"></i>
                 Back
             </button>
@@ -211,7 +213,7 @@
                 <div class="form-group">
                     <label>Email Address</label>
                     <input type="email" id="email" placeholder="you@example.com" required>
-                    <div class="hint">This will be used for login</div>
+                    <div class="hint">Used for login and notifications</div>
                 </div>
                 
                 <!-- WhatsApp Phone Number -->
@@ -227,47 +229,26 @@
                         </select>
                         <input type="tel" id="whatsappNumber" class="phone-input" placeholder="8012345678" required>
                     </div>
-                    <div class="hint">Your WhatsApp number for business communications</div>
+                    <div class="hint">For business communications</div>
                 </div>
                 
                 <!-- Password -->
                 <div class="form-group">
                     <label>Password</label>
                     <input type="password" id="password" placeholder="Enter your password" required>
-                    <div class="hint">Your current password</div>
+                    <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+                    <div class="hint">Current password - click eye icon to show/hide</div>
                 </div>
                 
-                <!-- Security Question 1 -->
+                <!-- Single Security Question -->
                 <div class="form-group">
-                    <label>Security Question 1</label>
-                    <input type="text" id="securityQuestion1" placeholder="Enter security question" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Answer 1</label>
-                    <input type="text" id="securityAnswer1" placeholder="Enter answer" required>
-                </div>
-                
-                <!-- Security Question 2 -->
-                <div class="form-group">
-                    <label>Security Question 2</label>
-                    <input type="text" id="securityQuestion2" placeholder="Enter security question" required>
+                    <label>Security Question</label>
+                    <input type="text" id="securityQuestion" placeholder="Your security question" required>
                 </div>
                 
                 <div class="form-group">
-                    <label>Answer 2</label>
-                    <input type="text" id="securityAnswer2" placeholder="Enter answer" required>
-                </div>
-                
-                <!-- Security Question 3 -->
-                <div class="form-group">
-                    <label>Security Question 3</label>
-                    <input type="text" id="securityQuestion3" placeholder="Enter security question" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Answer 3</label>
-                    <input type="text" id="securityAnswer3" placeholder="Enter answer" required>
+                    <label>Answer</label>
+                    <input type="text" id="securityAnswer" placeholder="Your answer" required>
                 </div>
                 
                 <div class="error" id="errorMessage"></div>
@@ -280,53 +261,68 @@
     </div>
 
     <script>
-        // Check login
-        const currentUser = localStorage.getItem('brandlyCurrentUser');
+        // Check authentication
+        let currentUser = JSON.parse(localStorage.getItem('brandlyCurrentUser'));
         if (!currentUser) {
             window.location.href = 'account.html';
         }
 
-        // Load user data
-        let userData = JSON.parse(currentUser);
-        
-        // Fill form with user data
+        // Initialize page
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('fullName').value = userData.name || '';
-            document.getElementById('email').value = userData.email || '';
-            document.getElementById('password').value = userData.password || '';
+            loadUserData();
+            setupEventListeners();
+        });
+
+        // Load user data into form
+        function loadUserData() {
+            document.getElementById('fullName').value = currentUser.name || '';
+            document.getElementById('email').value = currentUser.email || '';
+            document.getElementById('password').value = currentUser.password || '';
             
-            // Handle phone number
-            if (userData.whatsappNumber) {
-                const fullNumber = userData.whatsappNumber;
-                const countryCodes = ['+234', '+1', '+44', '+91', '+27'];
-                let foundCode = '+234';
-                let number = fullNumber;
+            // Load phone number
+            if (currentUser.whatsappNumber) {
+                const fullNumber = currentUser.whatsappNumber;
+                const countryCode = currentUser.countryCode || '+234';
+                const number = fullNumber.replace(countryCode, '');
                 
-                for (const code of countryCodes) {
-                    if (fullNumber.startsWith(code)) {
-                        foundCode = code;
-                        number = fullNumber.substring(code.length);
-                        break;
-                    }
-                }
-                
-                document.getElementById('countryCode').value = foundCode;
+                document.getElementById('countryCode').value = countryCode;
                 document.getElementById('whatsappNumber').value = number;
             }
             
-            // Load security questions
-            if (userData.securityQuestions) {
-                document.getElementById('securityQuestion1').value = userData.securityQuestions.q1 || '';
-                document.getElementById('securityAnswer1').value = userData.securityQuestions.a1 || '';
-                document.getElementById('securityQuestion2').value = userData.securityQuestions.q2 || '';
-                document.getElementById('securityAnswer2').value = userData.securityQuestions.a2 || '';
-                document.getElementById('securityQuestion3').value = userData.securityQuestions.q3 || '';
-                document.getElementById('securityAnswer3').value = userData.securityQuestions.a3 || '';
+            // Load security question
+            if (currentUser.securityQuestion) {
+                document.getElementById('securityQuestion').value = currentUser.securityQuestion || '';
+                document.getElementById('securityAnswer').value = currentUser.securityAnswer || '';
             }
-        });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Password visibility toggle
+            document.getElementById('togglePassword').addEventListener('click', togglePasswordVisibility);
+            
+            // Form submission
+            document.getElementById('profileForm').addEventListener('submit', handleFormSubmit);
+        }
+
+        // Toggle password visibility
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('togglePassword');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
 
         // Handle form submission
-        document.getElementById('profileForm').addEventListener('submit', (e) => {
+        function handleFormSubmit(e) {
             e.preventDefault();
             
             const fullName = document.getElementById('fullName').value.trim();
@@ -334,110 +330,105 @@
             const countryCode = document.getElementById('countryCode').value;
             const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
             const password = document.getElementById('password').value;
-            const securityQuestion1 = document.getElementById('securityQuestion1').value.trim();
-            const securityAnswer1 = document.getElementById('securityAnswer1').value.trim();
-            const securityQuestion2 = document.getElementById('securityQuestion2').value.trim();
-            const securityAnswer2 = document.getElementById('securityAnswer2').value.trim();
-            const securityQuestion3 = document.getElementById('securityQuestion3').value.trim();
-            const securityAnswer3 = document.getElementById('securityAnswer3').value.trim();
+            const securityQuestion = document.getElementById('securityQuestion').value.trim();
+            const securityAnswer = document.getElementById('securityAnswer').value.trim();
             
-            const errorElement = document.getElementById('errorMessage');
-            const successElement = document.getElementById('successMessage');
-            
-            // Basic validation
-            if (!fullName || !email || !whatsappNumber || !password) {
-                showError('Please fill all required fields');
-                return;
-            }
-            
-            // Email validation
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                showError('Please enter a valid email address');
-                return;
-            }
-            
-            // Phone validation
-            if (!/^\d{10,15}$/.test(whatsappNumber)) {
-                showError('Please enter a valid phone number (10-15 digits)');
-                return;
-            }
-            
-            // Security questions validation
-            const questions = [securityQuestion1, securityQuestion2, securityQuestion3];
-            const uniqueQuestions = new Set(questions);
-            if (uniqueQuestions.size < 3) {
-                showError('Security questions must be different from each other');
-                return;
-            }
-            
-            // Password length
-            if (password.length < 6) {
-                showError('Password must be at least 6 characters long');
+            // Validation
+            if (!validateForm(fullName, email, whatsappNumber, password)) {
                 return;
             }
             
             // Update user data
             const updatedUser = {
-                ...userData,
+                ...currentUser,
                 name: fullName,
                 email: email,
                 password: password,
                 whatsappNumber: countryCode + whatsappNumber,
-                securityQuestions: {
-                    q1: securityQuestion1,
-                    a1: securityAnswer1,
-                    q2: securityQuestion2,
-                    a2: securityAnswer2,
-                    q3: securityQuestion3,
-                    a3: securityAnswer3
-                }
+                countryCode: countryCode,
+                securityQuestion: securityQuestion,
+                securityAnswer: securityAnswer,
+                updatedAt: new Date().toISOString()
             };
             
-            // Save to localStorage
+            // Save changes
+            saveUserChanges(updatedUser, currentUser.email !== email);
+        }
+
+        // Validate form data
+        function validateForm(name, email, phone, password) {
+            const errorElement = document.getElementById('errorMessage');
+            
+            if (!name || !email || !phone || !password) {
+                showMessage('Please fill all required fields', 'error');
+                return false;
+            }
+            
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showMessage('Please enter a valid email address', 'error');
+                return false;
+            }
+            
+            if (!/^\d{10,15}$/.test(phone)) {
+                showMessage('Please enter a valid phone number (10-15 digits)', 'error');
+                return false;
+            }
+            
+            if (password.length < 6) {
+                showMessage('Password must be at least 6 characters long', 'error');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Save user changes
+        function saveUserChanges(updatedUser, emailChanged) {
+            // Update current user
             localStorage.setItem('brandlyCurrentUser', JSON.stringify(updatedUser));
+            currentUser = updatedUser;
             
             // Update in users list
             const users = JSON.parse(localStorage.getItem('brandlyUsers') || '[]');
-            const userIndex = users.findIndex(u => u.email === userData.email);
+            const userIndex = users.findIndex(u => u.email === updatedUser.email);
+            
             if (userIndex !== -1) {
                 users[userIndex] = updatedUser;
                 localStorage.setItem('brandlyUsers', JSON.stringify(users));
             }
             
-            // If email changed, update email in brands
-            if (email !== userData.email) {
-                updateBrandsEmail(userData.email, email);
+            // If email changed, update in other data
+            if (emailChanged) {
+                updateEmailInBrands(currentUser.email);
             }
             
-            userData = updatedUser;
-            showSuccess('Profile updated successfully!');
-        });
+            showMessage('Profile updated successfully!', 'success');
+        }
 
-        // Update email in user's brands
-        function updateBrandsEmail(oldEmail, newEmail) {
+        // Update email in brands and services
+        function updateEmailInBrands(newEmail) {
             try {
-                const userEmailKey = newEmail.replace(/[^a-zA-Z0-9]/g, '_');
-                
-                // Update main brands list
+                // Update brands list
                 const allBrands = JSON.parse(localStorage.getItem('brandlyServices') || '[]');
-                allBrands.forEach(brand => {
-                    if (brand.vendorEmail === oldEmail) {
-                        brand.vendorEmail = newEmail;
+                const updatedBrands = allBrands.map(brand => {
+                    if (brand.vendorEmail === currentUser.email) {
+                        return { ...brand, vendorEmail: newEmail };
                     }
+                    return brand;
                 });
-                localStorage.setItem('brandlyServices', JSON.stringify(allBrands));
+                localStorage.setItem('brandlyServices', JSON.stringify(updatedBrands));
                 
                 // Update home items
                 const homeItems = JSON.parse(localStorage.getItem('brandlyHomeItems') || '[]');
-                homeItems.forEach(item => {
-                    if (item.vendorEmail === oldEmail) {
-                        item.vendorEmail = newEmail;
+                const updatedItems = homeItems.map(item => {
+                    if (item.vendorEmail === currentUser.email) {
+                        return { ...item, vendorEmail: newEmail };
                     }
+                    return item;
                 });
-                localStorage.setItem('brandlyHomeItems', JSON.stringify(homeItems));
-                
+                localStorage.setItem('brandlyHomeItems', JSON.stringify(updatedItems));
             } catch (error) {
-                console.error('Error updating email in brands:', error);
+                console.error('Error updating email:', error);
             }
         }
 
@@ -449,32 +440,30 @@
             }
         }
 
-        // Show error message
-        function showError(message) {
+        // Go back function
+        function goBack() {
+            window.history.back();
+        }
+
+        // Show message
+        function showMessage(message, type) {
             const errorElement = document.getElementById('errorMessage');
             const successElement = document.getElementById('successMessage');
             
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-            successElement.style.display = 'none';
+            if (type === 'error') {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+                successElement.style.display = 'none';
+            } else {
+                successElement.textContent = message;
+                successElement.style.display = 'block';
+                errorElement.style.display = 'none';
+            }
             
             setTimeout(() => {
                 errorElement.style.display = 'none';
-            }, 4000);
-        }
-
-        // Show success message
-        function showSuccess(message) {
-            const errorElement = document.getElementById('errorMessage');
-            const successElement = document.getElementById('successMessage');
-            
-            successElement.textContent = message;
-            successElement.style.display = 'block';
-            errorElement.style.display = 'none';
-            
-            setTimeout(() => {
                 successElement.style.display = 'none';
-            }, 3000);
+            }, type === 'error' ? 4000 : 3000);
         }
     </script>
 </body>

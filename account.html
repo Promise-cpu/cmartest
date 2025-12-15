@@ -2,15 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Brandly - Account</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - Brandly</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -21,6 +17,9 @@
             background-color: whitesmoke;
             color: #333;
             min-height: 100vh;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         
         /* Page Header */
@@ -42,21 +41,12 @@
             min-height: calc(100vh - 140px);
         }
         
-        /* Account Page */
-        .account-content .section {
+        /* Sections */
+        .section {
             background-color: white;
             margin: 15px 0;
             padding: 15px;
             border-radius: 12px;
-        }
-        
-        .section-header {
-            margin-bottom: 15px;
-        }
-        
-        .section-title {
-            font-size: 20px;
-            font-weight: bold;
         }
         
         .welcome-section {
@@ -67,13 +57,19 @@
         .welcome-title {
             font-size: 22px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .welcome-email {
+            color: steelblue;
+            font-size: 16px;
+            margin-bottom: 15px;
         }
         
         .welcome-subtitle {
             color: #777;
             font-size: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         .auth-buttons {
@@ -83,7 +79,6 @@
         }
         
         .btn { 
-            display: inline-block; 
             padding: 12px 20px; 
             background: steelblue; 
             color: #fff; 
@@ -94,12 +89,13 @@
             font-size: 15px;
             text-align: center;
             cursor: pointer;
+            flex: 1;
         }
         
         .btn.secondary { 
             background: #fff; 
             color: steelblue; 
-            border: 1px solid #cfe3ff; 
+            border: 1px solid steelblue; 
         }
 
         .list-item { 
@@ -139,6 +135,7 @@
             position: fixed;
             bottom: 0;
             width: 100%;
+            max-width: 500px;
             background-color: white;
             display: flex;
             justify-content: space-around;
@@ -153,7 +150,6 @@
             align-items: center;
             font-size: 12px;
             color: #777;
-            text-decoration: none;
             width: 50%;
             background: none;
             border: none;
@@ -175,56 +171,53 @@
     <!-- Page Header -->
     <div class="page-header">Account</div>
     
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <main>
-        <div class="account-content">
-            <div class="section welcome-section" id="welcomeSection">
-                <div class="welcome-title" id="welcomeTitle">Welcome to Brandly</div>
-                <div class="welcome-subtitle" id="welcomeSubtitle">Please sign in to access your account</div>
-                <div class="auth-buttons" id="authButtons">
-                    <a href="sign.html?action=signin" class="btn">Sign In</a>
-                    <a href="sign.html?action=signup" class="btn secondary">Create Account</a>
-                </div>
+        <!-- Welcome Section (Dynamically Updated) -->
+        <div class="section welcome-section" id="welcomeSection">
+            <div class="welcome-title" id="welcomeTitle">Welcome to Brandly</div>
+            <div class="welcome-email" id="welcomeEmail"></div>
+            <div class="welcome-subtitle" id="welcomeSubtitle">Sign in to access your account</div>
+            <div class="auth-buttons" id="authButtons">
+                <a href="sign.html?action=signin" class="btn">Sign In</a>
+                <a href="sign.html?action=signup" class="btn secondary">Create Account</a>
             </div>
+        </div>
 
-            <div class="section" id="advertiseSection">
-                <div class="section-header">
-                    <div class="section-title">Advertise Products & Services</div>
-                </div>
-                <div class="list-item" id="advertiseItem">
-                    <div class="list-icon"><i class="fas fa-bullhorn"></i></div>
-                    <div class="list-text">Promote your business on Brandly</div>
-                    <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
-                </div>
+        <!-- Advertise Section -->
+        <div class="section" id="advertiseSection">
+            <div class="list-item" id="advertiseItem">
+                <div class="list-icon"><i class="fas fa-bullhorn"></i></div>
+                <div class="list-text">Advertise Products & Services</div>
+                <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
+        </div>
 
-            <div class="section" id="supportSection">
-                <div class="section-header">
-                    <div class="section-title">Support</div>
-                </div>
-                <div class="list-item">
-                    <div class="list-icon"><i class="fas fa-question-circle"></i></div>
-                    <div class="list-text">Help Center</div>
-                    <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
-                </div>
-                <div class="list-item">
-                    <div class="list-icon"><i class="fas fa-comments"></i></div>
-                    <div class="list-text">Contact Us</div>
-                    <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
-                </div>
-                <div class="list-item" id="editProfileBtn">
-                    <div class="list-icon"><i class="fas fa-user-edit"></i></div>
-                    <div class="list-text">Edit Profile</div>
-                    <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
-                </div>
+        <!-- Support Section -->
+        <div class="section" id="supportSection">
+            <div class="list-item" id="editProfileBtn">
+                <div class="list-icon"><i class="fas fa-user-edit"></i></div>
+                <div class="list-text">Edit Profile</div>
+                <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
+            <div class="list-item">
+                <div class="list-icon"><i class="fas fa-question-circle"></i></div>
+                <div class="list-text">Help Center</div>
+                <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+            <div class="list-item">
+                <div class="list-icon"><i class="fas fa-comments"></i></div>
+                <div class="list-text">Contact Us</div>
+                <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </div>
 
-            <div class="section hidden" id="logoutSection">
-                <div class="list-item" id="logoutBtn">
-                    <div class="list-icon"><i class="fas fa-sign-out-alt"></i></div>
-                    <div class="list-text">Logout</div>
-                    <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
-                </div>
+        <!-- Logout Section (Only shown when logged in) -->
+        <div class="section hidden" id="logoutSection">
+            <div class="list-item" id="logoutBtn">
+                <div class="list-icon"><i class="fas fa-sign-out-alt"></i></div>
+                <div class="list-text">Logout</div>
+                <div class="list-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
         </div>
     </main>
@@ -242,93 +235,148 @@
     </div>
 
     <script>
-        // Initialize application
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initApp);
+
         function initApp() {
             checkLoginStatus();
+            setupEventListeners();
         }
 
-        // Check login status for account page
         function checkLoginStatus() {
-            const user = localStorage.getItem('cmartCurrentUser');
+            const user = localStorage.getItem('brandlyCurrentUser');
             const welcomeTitle = document.getElementById('welcomeTitle');
+            const welcomeEmail = document.getElementById('welcomeEmail');
             const welcomeSubtitle = document.getElementById('welcomeSubtitle');
             const authButtons = document.getElementById('authButtons');
             const logoutSection = document.getElementById('logoutSection');
             const advertiseItem = document.getElementById('advertiseItem');
-            
+
             if (user) {
                 try {
                     const userData = JSON.parse(user);
-                    welcomeTitle.textContent = 'Welcome back, ' + userData.name + '!';
-                    welcomeSubtitle.textContent = 'You are signed in to your account';
+                    
+                    // Update welcome section for logged-in user
+                    welcomeTitle.textContent = `Welcome back, ${userData.name}!`;
+                    welcomeEmail.textContent = userData.email;
+                    welcomeEmail.classList.remove('hidden');
+                    welcomeSubtitle.textContent = 'Manage your account settings';
                     authButtons.classList.add('hidden');
                     logoutSection.classList.remove('hidden');
                     
-                    advertiseItem.onclick = function() {
-                        window.location.href = 'store.html';
-                    };
+                    // Set up advertise functionality
+                    advertiseItem.onclick = () => window.location.href = 'store.html';
                 } catch (e) {
-                    localStorage.removeItem('cmartCurrentUser');
-                    checkLoginStatus();
+                    // Clear corrupted data
+                    localStorage.removeItem('brandlyCurrentUser');
+                    resetToGuestMode();
                 }
             } else {
-                welcomeTitle.textContent = 'Welcome to Brandly';
-                welcomeSubtitle.textContent = 'Please sign in to access your account';
-                authButtons.classList.remove('hidden');
-                logoutSection.classList.add('hidden');
-                
-                advertiseItem.onclick = function() {
-                    alert('Please create an account or sign in to advertise your products and services on Brandly.');
-                };
-            }
-            
-            // Setup logout button
-            const logoutBtn = document.getElementById('logoutBtn');
-            if (logoutBtn) {
-                logoutBtn.onclick = function() {
-                    localStorage.removeItem('cmartCurrentUser');
-                    checkLoginStatus();
-                    showMessage('You have been logged out successfully', 'success');
-                };
-            }
-            
-            // Setup edit profile button to go to profile.html
-            const editProfileBtn = document.getElementById('editProfileBtn');
-            if (editProfileBtn) {
-                editProfileBtn.onclick = function() {
-                    window.location.href = 'profile.html';
-                };
+                resetToGuestMode();
             }
         }
 
-        // Show message function
+        function resetToGuestMode() {
+            const welcomeTitle = document.getElementById('welcomeTitle');
+            const welcomeEmail = document.getElementById('welcomeEmail');
+            const welcomeSubtitle = document.getElementById('welcomeSubtitle');
+            const authButtons = document.getElementById('authButtons');
+            const logoutSection = document.getElementById('logoutSection');
+            const advertiseItem = document.getElementById('advertiseItem');
+
+            welcomeTitle.textContent = 'Welcome to Brandly';
+            welcomeEmail.textContent = '';
+            welcomeEmail.classList.add('hidden');
+            welcomeSubtitle.textContent = 'Sign in to access your account';
+            authButtons.classList.remove('hidden');
+            logoutSection.classList.add('hidden');
+            
+            advertiseItem.onclick = () => {
+                alert('Please create an account or sign in to advertise on Brandly.');
+            };
+        }
+
+        function setupEventListeners() {
+            // Logout button
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.onclick = logoutUser;
+            }
+
+            // Edit profile button
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            if (editProfileBtn) {
+                editProfileBtn.onclick = () => {
+                    const user = localStorage.getItem('brandlyCurrentUser');
+                    if (user) {
+                        window.location.href = 'profile.html';
+                    } else {
+                        window.location.href = 'sign.html?action=signin';
+                    }
+                };
+            }
+
+            // Navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (this.classList.contains('active')) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('brandlyCurrentUser');
+            showMessage('Logged out successfully', 'success');
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        }
+
         function showMessage(message, type) {
             const messageDiv = document.createElement('div');
+            messageDiv.textContent = message;
             messageDiv.style.cssText = `
                 position: fixed;
                 top: 20px;
                 left: 50%;
                 transform: translateX(-50%);
-                background: ${type === 'success' ? '#1e8f3e' : '#c0392b'};
+                background: ${type === 'success' ? '#4CAF50' : '#F44336'};
                 color: white;
                 padding: 12px 24px;
                 border-radius: 8px;
                 z-index: 10000;
                 font-weight: 600;
                 box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                animation: slideIn 0.3s ease;
             `;
-            messageDiv.textContent = message;
+            
             document.body.appendChild(messageDiv);
             
             setTimeout(() => {
-                if (document.body.contains(messageDiv)) {
-                    document.body.removeChild(messageDiv);
-                }
-            }, 3000);
+                messageDiv.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (document.body.contains(messageDiv)) {
+                        document.body.removeChild(messageDiv);
+                    }
+                }, 300);
+            }, 2500);
         }
 
-        // Initial load
-        document.addEventListener('DOMContentLoaded', initApp);
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+                to { transform: translateX(-50%) translateY(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(-50%) translateY(0); opacity: 1; }
+                to { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
